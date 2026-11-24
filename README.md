@@ -43,6 +43,8 @@ flowchart TB
     style RUN fill:transparent,stroke:#7f8c9a,stroke-dasharray:4 3
 ```
 
+<img src="assets/diagram-key.svg" alt="Key: rounded amber, a person decides or acts; navy, a step a system runs; Claude in bold, a step Claude runs; green, what comes out">
+
 1. **Read state.** The settings, your notes, the last edition, and every tap saved on the page since then. `tally.py` turns the taps into two tables: what the stories were about (tags) and what kind of story they were (angles).
 2. **Research.** One Claude subagent per section searches and reads the pages in parallel, about 25 candidates in all. A fact goes on the page only from a page read in that run; a story known only from a headline or a digest says so.
 3. **Mistral, blind.** Mistral searches the news on its own before it sees Claude's list, so its picks are not anchored on Claude's. Stories only Mistral found are checked against a second source.
