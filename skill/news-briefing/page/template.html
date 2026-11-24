@@ -1,0 +1,599 @@
+<title>News Briefing</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: a front page. Sections take hues s1 to s4 in the order the edition lists them. One lead story with a full-width photo, two second stories side by side, then one swipeable row of picture-or-number tiles per section. Any story opens as a full-screen sheet with the detail, the buttons and the chat. */
+:root{
+  --bg:#f3f4f7; --surface:#ffffff; --fg:#151c27; --muted:#5b6676; --line:#dce1e8; --chip:#e9ecf2; --inset:#eef0f6;
+  --s1:#3848b8; --s2:#9a2f78; --s3:#0b7466; --s4:#5a7410; --split:#a65a08; --second:#c2410c; --on-accent:#ffffff; --scrim:rgba(10,14,20,.55);
+  --display:"Space Grotesk","Segoe UI",system-ui,sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f141b; --surface:#18202a; --fg:#e8ecf2; --muted:#9ba7b6; --line:#2b3644; --chip:#232d3a; --inset:#1e2733;
+  --s1:#93a0ff; --s2:#ea8bcb; --s3:#55cdb9; --s4:#b9d45c; --split:#eeaa55; --second:#fb923c; --on-accent:#0f141b; --scrim:rgba(0,0,0,.6); color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f141b; --surface:#18202a; --fg:#e8ecf2; --muted:#9ba7b6; --line:#2b3644; --chip:#232d3a; --inset:#1e2733;
+  --s1:#93a0ff; --s2:#ea8bcb; --s3:#55cdb9; --s4:#b9d45c; --split:#eeaa55; --second:#fb923c; --on-accent:#0f141b; --scrim:rgba(0,0,0,.6); color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:16px 56px}
+body.locked{overflow:hidden}
+.wrap{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:26px;min-width:0}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0}
+a{color:inherit;text-underline-offset:2px;text-decoration-color:var(--muted)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.s1{--c:var(--s1)} .s2{--c:var(--s2)} .s3{--c:var(--s3)} .s4{--c:var(--s4)} .lv{--c:var(--fg)}
+.kicker{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.meta{color:var(--muted);font-size:.88rem}
+
+/* masthead */
+.mast{display:flex;flex-direction:column;gap:4px}
+.mast h1{font-size:1.55rem;font-weight:700;letter-spacing:-.01em}
+.thread{font-size:1rem;color:var(--fg);border-left:3px solid var(--fg);padding-left:12px}
+
+/* shared visual block: a photo, or a number panel in the section hue */
+.vis{position:relative;display:block;width:100%;overflow:hidden;background:color-mix(in srgb, var(--c) 14%, var(--surface))}
+.vis img{display:block;width:100%;height:100%;object-fit:cover}
+.vis .credit{position:absolute;right:8px;bottom:8px;font-size:.66rem;background:rgba(0,0,0,.55);color:#fff;padding:2px 7px;border-radius:999px}
+.num{display:flex;flex-direction:column;justify-content:flex-end;gap:2px;padding:14px;height:100%}
+.num b{font-family:var(--display);font-weight:700;color:var(--c);line-height:.95;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.num span{font-size:.8rem;color:var(--muted);line-height:1.3}
+
+/* tappable story surfaces */
+.tap{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:left;padding:0;cursor:pointer;min-width:0;width:100%}
+.tap:active{transform:scale(.99)}
+.tap .txt{padding:11px 13px 13px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tap .sk{color:var(--c)}
+.flags{display:flex;flex-wrap:wrap;gap:5px}
+.flag{font-size:.68rem;font-weight:600;border-radius:999px;padding:1px 7px;box-shadow:inset 0 0 0 1px currentColor}
+.flag.split{color:var(--split)} .flag.second{color:var(--second)} .flag.back{color:var(--c)} .flag.done{color:var(--muted)}
+
+.lead .vis{aspect-ratio:16/10}
+.lead .num b{font-size:3.4rem}
+.lead h2{font-size:1.45rem;font-weight:700}
+.lead .keyline{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.lead .keyline b{font-family:var(--display);font-size:1.5rem;color:var(--c);font-variant-numeric:tabular-nums}
+.lead .keyline span{color:var(--muted);font-size:.88rem}
+.lead .sum{font-size:.98rem}
+
+.seconds{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seconds .vis{aspect-ratio:4/3}
+.seconds .num b{font-size:2.1rem}
+.seconds h3{font-size:1rem;font-weight:600}
+
+.sec{display:flex;flex-direction:column;gap:10px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;border-top:3px solid var(--c);padding-top:8px}
+.sec-head h2{font-size:1.15rem;color:var(--c)}
+.row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;scrollbar-width:none}
+.row::-webkit-scrollbar{display:none}
+.row .tap{flex:0 0 62%;max-width:230px;scroll-snap-align:start}
+.row .vis{aspect-ratio:4/3}
+.row .num b{font-size:1.9rem}
+.row h3{font-size:.96rem;font-weight:600;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+
+.brief{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:9px}
+.brief ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.brief li{display:flex;gap:10px;font-size:.92rem;line-height:1.4}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none;margin-top:6px}
+.basis{color:var(--muted);font-size:.78rem}
+
+.plain{display:flex;flex-direction:column;gap:10px}
+.plain h2{font-size:1.15rem}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:7px 10px 7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+td:first-child{white-space:nowrap;font-weight:500}
+.deeper{margin:0;padding-left:1.1rem;display:flex;flex-direction:column;gap:6px}
+.note{font-size:.84rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+
+/* story sheet */
+.sheet{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:calc(env(safe-area-inset-top, 0px) + 0px) max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px))}
+/* No bottom padding: the sticky action bar must sit on the screen edge, or text shows through below it. The bar carries the safe-area inset itself. */
+.sheet[hidden]{display:none}
+.sheet .in{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.sbar{position:sticky;top:0;z-index:2;background:var(--bg);display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.sbar .sk{color:var(--c)}
+.close{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;min-height:38px;font-weight:600;cursor:pointer}
+.sheet .vis{aspect-ratio:16/10;border-radius:14px}
+.sheet .num b{font-size:3.2rem}
+.sheet h2{font-size:1.45rem;font-weight:700}
+.sheet .keyline{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.sheet .keyline b{font-family:var(--display);font-size:1.6rem;color:var(--c);font-variant-numeric:tabular-nums}
+.sheet .keyline span{color:var(--muted);font-size:.9rem}
+.changed{background:var(--inset);border-radius:10px;padding:9px 12px;font-size:.94rem}
+.cov{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.76rem;font-weight:500;background:var(--chip);border-radius:999px;padding:3px 9px}
+.chip.split{color:var(--split);box-shadow:inset 0 0 0 1px var(--split);background:transparent}
+.chip.blind{color:var(--muted);box-shadow:inset 0 0 0 1px var(--line);background:transparent}
+.chip.second{color:var(--second);box-shadow:inset 0 0 0 1px var(--second);background:transparent}
+.extras{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.extras ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.extras li{display:grid;grid-template-columns:4.6rem 1fr;gap:10px;font-size:.92rem;line-height:1.35}
+.extras .when{font-family:var(--display);font-weight:600;color:var(--c);font-size:.86rem}
+.extras .sub{display:block;color:var(--muted);font-size:.82rem}
+.extras li.rank{grid-template-columns:1fr}
+.lbl{display:block;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--c);margin-bottom:2px}
+.read{background:var(--inset);border-radius:12px;padding:11px 13px}
+.read .lbl{color:var(--muted)}
+.splitbox{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.splitbox div{border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:.92rem;min-width:0;background:var(--surface)}
+.splitbox b{display:block;font-size:.74rem;color:var(--split);margin-bottom:2px}
+.mnote{border-left:3px solid var(--second);padding:2px 0 2px 11px;font-size:.93rem}
+.mnote .lbl{color:var(--second)}
+.srcs{display:flex;flex-direction:column;gap:3px;font-size:.86rem;color:var(--muted)}
+.srcs a{color:var(--fg)}
+figure{margin:0;display:flex;flex-direction:column;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+figcaption{font-size:.78rem;color:var(--muted)}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--body);fill:var(--fg)}
+.tl{list-style:none;margin:0;padding:0 0 0 2px;display:flex;flex-direction:column}
+.tl li{position:relative;padding:0 0 10px 16px;font-size:.9rem;border-left:2px solid var(--line)}
+.tl li:last-child{padding-bottom:0}
+.tl li::before{content:"";position:absolute;left:-6px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--c)}
+.tl b{font-weight:600;margin-right:6px}
+.cmp{display:flex;flex-direction:column;gap:9px}
+.cmp .r{display:flex;flex-direction:column;gap:3px;font-size:.88rem}
+.cmp .track{height:9px;border-radius:5px;background:var(--chip);overflow:hidden}
+.cmp .fill{height:100%;background:var(--c)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;position:sticky;bottom:0;background:var(--bg);padding:10px 0 calc(env(safe-area-inset-bottom, 0px) + 6px);border-top:1px solid var(--line)}
+.acts button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 15px;min-height:42px;font-size:.9rem;font-weight:600;cursor:pointer}
+.acts button[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:var(--on-accent)}
+.acts button:disabled{opacity:.45;cursor:default}
+.chat{background:var(--inset);border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:10px}
+.msg{font-size:.94rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.you{font-weight:600}
+.msg small{display:block;color:var(--muted);font-size:.72rem;font-weight:400;margin-top:2px}
+.chat form{display:flex;gap:8px;align-items:flex-end}
+.chat textarea{flex:1;min-width:0;font:inherit;font-size:16px;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--surface);color:var(--fg);resize:vertical;min-height:44px}
+.chat .send{border:0;border-radius:8px;padding:10px 14px;background:var(--c);color:var(--on-accent);font-weight:600;cursor:pointer}
+.chat .send:disabled{opacity:.5}
+.lvcard{border-width:2px;border-color:var(--fg)}
+.lvcard h2{font-size:1.35rem;font-weight:700}
+.lvcard .sum{font-size:.98rem}
+.standfirst{font-size:1.05rem;font-weight:500}
+.lvbody{display:flex;flex-direction:column;gap:12px;font-size:1rem;line-height:1.6}
+.claim{border:1px dashed var(--muted);border-radius:12px;padding:11px 13px;font-size:.95rem}
+.sub2{display:block;color:var(--muted);font-size:.8rem}
+.pick{display:flex;flex-direction:column;gap:8px}
+.pick button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 13px;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.pick button b{font-weight:600;font-size:.95rem}
+.pick button span{font-size:.82rem;color:var(--muted)}
+.pick button[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
+.pick button:disabled{opacity:.55;cursor:default}
+@media (max-width:360px){.seconds{grid-template-columns:1fr}.splitbox{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){.tap:active{transform:none}}
+</style>
+
+<div class="wrap" id="app"></div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title"></div>
+
+<script type="application/json" id="edition">__EDITION_JSON__</script>
+<script>
+const E = JSON.parse(document.getElementById("edition").textContent);
+const ALL = [];
+for (const sec of E.sections) for (const s of sec.stories) ALL.push({ s, sec });
+const byId = Object.fromEntries(ALL.map(x => [x.s.id, x]));
+// Section hues follow the order of the sections, so any four sections get the four colors.
+const HUE = Object.fromEntries(E.sections.map((sec, i) => [sec.id, "s" + (i % 4 + 1)]));
+HUE.lv = "lv";
+// The second editor: another model that checks the selection and the draft (settings.md). Null when none is set.
+const SECOND = E.second_editor || null;
+// The long view: one analysis piece per edition, handled like a story for taps and chat.
+const LV = E.long_view ? { ...E.long_view, id: "long-view", kind: "long_view", headline: E.long_view.title, tags: E.long_view.tags || ["long-view"] } : null;
+if (LV) byId[LV.id] = { s: LV, sec: { id: "lv", name: "The long view" } };
+const LEAD = (E.lead || []).filter(id => byId[id]);
+if (!LEAD.length) LEAD.push(...ALL.slice(0, 3).map(x => x.s.id));
+
+const fb = {};            // story id -> saved row
+const chatUi = { busy: false, pending: null, error: null };
+const chain = {};
+let db = null, sample = null, canWrite = true, dbState = "Checking saved taps…", openId = null, returnFocus = null, pushed = false, pick = null, pickChain = Promise.resolve(), openedAt = 0;
+
+const h = (tag, props = {}, ...kids) => {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (v == null || v === false) continue;
+    if (k === "class") el.className = v;
+    else if (k === "text") el.textContent = v;
+    else if (k.startsWith("on")) el[k] = v;
+    else el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const k of kids.flat()) if (k != null && k !== false) el.append(k);
+  return el;
+};
+const fmtDate = iso => { try { return new Date(iso + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" }); } catch { return iso; } };
+const TIER = { quick: "Claude, fast model", default: "Claude, everyday model", complex: "Claude, most capable model" };
+
+/* ---------- visual block: photo, else number panel ---------- */
+function vis(s, size) {
+  if (s.photo?.src) return h("div", { class: "vis" }, h("img", { src: s.photo.src, alt: "", loading: size === "lead" ? "eager" : "lazy" }),
+    s.photo.credit ? h("span", { class: "credit", text: s.photo.credit }) : null);
+  if (s.key) return h("div", { class: "vis" }, h("div", { class: "num" }, h("b", { text: s.key.value }), h("span", { text: s.key.label })));
+  return null;
+}
+
+function flags(s) {
+  const f = fb[s.id] || {};
+  const out = [];
+  if (s.returning) out.push(h("span", { class: "flag back", text: "Back" }));
+  if (s.coverage?.split) out.push(h("span", { class: "flag split", text: "Sources split" }));
+  if (s.second_differs) out.push(h("span", { class: "flag second", text: SECOND + " differs" }));
+  if (f.skipped) out.push(h("span", { class: "flag done", text: "Skipped" }));
+  else if (f.liked) out.push(h("span", { class: "flag done", text: "Liked" }));
+  else if (f.read) out.push(h("span", { class: "flag done", text: "Read" }));
+  return out.length ? h("div", { class: "flags" }, out) : null;
+}
+
+function tile(id, kind) {
+  const { s, sec } = byId[id];
+  const showKeyLine = kind === "lead" && s.photo?.src && s.key;
+  return h("button", { type: "button", class: "tap " + HUE[sec.id] + (kind === "lead" ? " lead" : ""), id: "t-" + id,
+    "aria-label": s.headline, onclick: e => openSheet(id, e.currentTarget) },
+    vis(s, kind),
+    h("div", { class: "txt" },
+      h("span", { class: "kicker sk", text: sec.name }),
+      kind === "lead" ? h("h2", { text: s.headline }) : h("h3", { text: s.headline }),
+      showKeyLine ? h("div", { class: "keyline" }, h("b", { text: s.key.value }), h("span", { text: s.key.label })) : null,
+      kind === "lead" ? h("p", { class: "sum", text: s.summary }) : null,
+      flags(s)));
+}
+
+/* ---------- page ---------- */
+function draw() {
+  const rest = sec => sec.stories.map(s => s.id).filter(id => !LEAD.includes(id));
+  const briefs = E.sections.flatMap(sec => (sec.briefs || []).map(b => ({ b, sec })));
+  const parts = [
+    h("header", { class: "mast" },
+      h("span", { class: "kicker", text: E.masthead || "Briefing" }),
+      h("h1", { text: E.title }),
+      h("p", { class: "meta", text: [E.covers, ALL.length + " stories", E.read_minutes ? "about " + E.read_minutes + " min" : null].filter(Boolean).join(" · ") })),
+    tile(LEAD[0], "lead"),
+    LEAD.length > 1 ? h("div", { class: "seconds" }, LEAD.slice(1, 3).map(id => tile(id, "second"))) : null,
+    E.big_picture ? h("p", { class: "thread", text: E.big_picture }) : null,
+    E.sections.filter(sec => rest(sec).length || sec.events?.length || sec.rankings?.length).map(sec => h("section", { class: "sec " + HUE[sec.id], "aria-label": sec.name },
+      h("div", { class: "sec-head" }, h("h2", { text: sec.name }), rest(sec).length > 1 ? h("span", { class: "meta", text: "swipe →" }) : null),
+      rest(sec).length ? h("div", { class: "row" }, rest(sec).map(id => tile(id, "row"))) : null,
+      sec.rankings?.length ? h("div", { class: "extras" }, h("span", { class: "kicker", text: "Rankings" }),
+        h("ul", {}, sec.rankings.map(r => h("li", { class: "rank" }, h("span", {}, h("a", { href: r.url, target: "_blank", rel: "noopener", text: r.name }), " · " + [r.publisher, r.date].filter(Boolean).join(", "),
+          h("span", { class: "sub", text: r.summary }))))) ) : null,
+      sec.events?.length ? h("div", { class: "extras" }, h("span", { class: "kicker", text: "Events ahead" }),
+        h("ul", {}, sec.events.map(ev => h("li", {}, h("span", { class: "when", text: ev.date }),
+          h("span", {}, h("a", { href: ev.url, target: "_blank", rel: "noopener", text: ev.name }),
+            h("span", { class: "sub", text: [ev.venue, ev.who, ev.price].filter(Boolean).join(" · ") })))))) : null)),
+    LV ? lvCard() : null,
+    briefs.length ? h("section", { class: "brief", "aria-label": "In brief" }, h("span", { class: "kicker", text: "In brief" }),
+      h("ul", {}, briefs.map(({ b, sec }) => h("li", { class: HUE[sec.id] }, h("span", { class: "dot" }),
+        h("span", {}, b.text, " ", h("span", { class: "basis" }, "(", b.sources.flatMap((x, i) => [i ? ", " : "", h("a", { href: x.url, target: "_blank", rel: "noopener", text: x.name })]),
+          b.basis && b.basis !== "read" ? ", " + b.basis + " only" : "", ")")))))) : null,
+    E.threads?.length ? h("section", { class: "plain" }, h("h2", { text: "Threads to watch" }),
+      h("div", { class: "tw" }, h("table", {}, h("thead", {}, h("tr", {}, h("th", { text: "When" }), h("th", { text: "What to look for" }))),
+        h("tbody", {}, E.threads.map(t => h("tr", {}, h("td", { text: t.when }), h("td", { text: t.what }))))))) : null,
+    E.deeper?.length ? h("section", { class: "plain" }, h("h2", { text: "Go deeper" }),
+      h("p", { class: "meta", text: "Ask Claude under any story, or in a chat:" }),
+      h("ul", { class: "deeper" }, E.deeper.map(q => h("li", { text: q })))) : null,
+    picker(),
+    makingOf(),
+    h("p", { class: "note", id: "status", "aria-live": "polite", text: dbState })];
+  // replaceChildren stringifies nested arrays, so flatten them and drop empty slots first
+  document.getElementById("app").replaceChildren(...parts.flat(Infinity).filter(x => x != null && x !== false));
+}
+
+function makingOf() {
+  const m = E.making_of || {}, mi = m.second || {};
+  const lines = [];
+  if (SECOND && mi.blind_scan?.ran) lines.push(SECOND + " searched the news on its own first: " + mi.blind_scan.stories + " stories, "
+    + (mi.blind_scan.only_second_kept?.length || 0) + " found only by " + SECOND + " and kept, " + (mi.blind_scan.only_second_dropped || 0) + " found only by " + SECOND + " and dropped.");
+  if (SECOND && mi.selection?.ran) lines.push("Selection check: Claude followed " + SECOND + " " + mi.selection.followed + " times and overruled it " + mi.selection.overruled + " times.");
+  if (SECOND && mi.draft_check?.ran) lines.push("Draft check: " + SECOND + " raised " + mi.draft_check.flags + " flags; " + mi.draft_check.acted_on + " led to changes.");
+  const who = SECOND ? "Claude researched and wrote it; " + SECOND + (mi.model ? " (" + mi.model + ")" : "") + " checked the selection and the draft. " : "Claude researched and wrote it; no second model checked it. ";
+  return h("section", { class: "note" },
+    h("p", {}, h("b", { text: "How this was made. " }), who + "Facts come from pages read for this edition; \"My read\" is interpretation."),
+    lines.length ? h("ul", { class: "deeper" }, lines.map(l => h("li", { text: l }))) : null,
+    m.limits ? h("p", {}, h("b", { text: "Limits. " }), m.limits) : null);
+}
+
+function lvCard() {
+  return h("button", { type: "button", class: "tap lv lvcard", id: "t-long-view", "aria-label": LV.title, onclick: e => openSheet("long-view", e.currentTarget) },
+    h("div", { class: "txt" },
+      h("span", { class: "kicker sk", text: "The long view · analysis" }),
+      h("h2", { text: LV.title }),
+      h("p", { class: "sum", text: LV.standfirst }),
+      h("span", { class: "meta", text: (SECOND && LV.second ? "Claude's argument, " + SECOND + "'s reply · " : "Claude's argument · ") + (LV.read_minutes || 3) + " min" }),
+      flags(LV)));
+}
+
+function picker() {
+  const qs = E.next_questions || [];
+  if (!qs.length) return null;
+  return h("section", { class: "plain lv", id: "picker", "aria-label": "Pick the next long view" },
+    h("h2", { text: "Pick the next long view" }),
+    h("p", { class: "meta", text: pick ? "Saved. The next edition will write it." : "Optional. Without a pick, the next edition chooses from its own stories." }),
+    h("div", { class: "pick" }, qs.map(q => h("button", { type: "button", "aria-pressed": String(pick === q.id), disabled: (!db || !canWrite) || null, onclick: () => savePick(q) },
+      h("b", { text: q.question }), q.why ? h("span", { text: q.why }) : null))));
+}
+
+function savePick(q) {
+  if (!db || !canWrite) return;
+  pick = pick === q.id ? null : q.id;
+  redrawPicker();
+  const row = { edition: E.edition, story: "next-question", pick, question: pick ? q.question : null, updatedAt: new Date().toISOString() };
+  pickChain = pickChain.then(async () => {
+    try { await db.collection("feedback").doc(E.edition + "__next-question").set(row); }
+    catch (e) { dbState = "Your pick did not save. Tap again."; setStatus(); }
+  });
+}
+
+function redrawPicker() {
+  const old = document.getElementById("picker"), fresh = picker();
+  if (old && fresh) old.replaceWith(fresh);
+}
+
+function refreshTile(id) {
+  const old = document.getElementById("t-" + id);
+  if (!old) return;
+  if (id === "long-view") { old.replaceWith(lvCard()); return; }
+  const kind = old.classList.contains("lead") ? "lead" : old.closest(".seconds") ? "second" : "row";
+  old.replaceWith(tile(id, kind));
+}
+
+/* ---------- charts ---------- */
+function chart(v) {
+  if (!v) return null;
+  if (v.type === "bars") return bars(v);
+  if (v.type === "timeline") return h("figure", {}, h("ol", { class: "tl" }, v.items.map(i => h("li", {}, h("b", { text: i.date }), i.text))), v.caption ? h("figcaption", { text: v.caption }) : null);
+  if (v.type === "compare") return h("figure", {}, h("div", { class: "cmp" }, v.items.map(i => {
+    const pct = Math.max(0, Math.min(100, 100 * i.value / i.of));
+    return h("div", { class: "r" }, h("span", { text: i.label + ": " + i.value + " of " + i.of + (i.text ? " " + i.text : "") }),
+      h("div", { class: "track", role: "img", "aria-label": Math.round(pct) + "%" }, h("div", { class: "fill", style: "width:" + pct + "%" })));
+  })), v.caption ? h("figcaption", { text: v.caption }) : null);
+  return null;
+}
+
+function bars(v) {
+  const NS = "http://www.w3.org/2000/svg";
+  const rowH = 28, labelW = 112, valW = 64, W = 360, plotW = W - labelW - valW;
+  const max = Math.max(...v.items.map(i => Math.abs(i.value))) || 1;
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${v.items.length * rowH}`);
+  svg.setAttribute("role", "img"); svg.setAttribute("aria-label", v.caption || "Bar chart");
+  v.items.forEach((i, k) => {
+    const y = k * rowH, w = Math.max(2, plotW * Math.abs(i.value) / max);
+    const t = document.createElementNS(NS, "text");
+    t.setAttribute("x", 0); t.setAttribute("y", y + 18); t.setAttribute("font-size", "12"); t.textContent = i.label;
+    const r = document.createElementNS(NS, "rect");
+    r.setAttribute("x", labelW); r.setAttribute("y", y + 6); r.setAttribute("width", w); r.setAttribute("height", 16); r.setAttribute("rx", 3); r.setAttribute("fill", "var(--c)");
+    const vt = document.createElementNS(NS, "text");
+    vt.setAttribute("x", labelW + w + 6); vt.setAttribute("y", y + 18); vt.setAttribute("font-size", "12"); vt.setAttribute("font-weight", "600");
+    const signed = v.signed !== false;
+    const num = Number.isInteger(i.value) ? String(Math.abs(i.value)) : Math.abs(i.value).toFixed(1);
+    vt.textContent = (i.value < 0 ? "−" : signed && i.value > 0 ? "+" : "") + num + (v.unit || "");
+    svg.append(t, r, vt);
+  });
+  return h("figure", {}, svg, v.caption ? h("figcaption", { text: v.caption }) : null);
+}
+
+/* ---------- sheet ---------- */
+function openSheet(id, from) {
+  if (!byId[id]) return;
+  returnFocus = from || document.getElementById("t-" + id);
+  openId = id; openedAt = Date.now();
+  if (location.hash !== "#" + id) { try { location.hash = id; pushed = true; } catch { pushed = false; } }
+  drawSheet();
+  const sh = document.getElementById("sheet");
+  sh.hidden = false; sh.scrollTop = 0; document.body.classList.add("locked");
+  sh.querySelector(".close")?.focus();
+  if (!(fb[id] || {}).opened) save(byId[id].s, { opened: true });
+}
+
+function closeSheet(fromHash) {
+  if (!openId) return;
+  const id = openId; openId = null;
+  const secs = Math.round((Date.now() - openedAt) / 1000);
+  if (secs >= 3 && byId[id]) save(byId[id].s, { seconds: Math.min(3600, ((fb[id] || {}).seconds || 0) + secs) });
+  document.getElementById("sheet").hidden = true; document.body.classList.remove("locked");
+  if (!fromHash && location.hash) { try { if (pushed) history.back(); else location.hash = ""; } catch {} }
+  pushed = false;
+  (document.getElementById("t-" + id) || returnFocus)?.focus();
+}
+
+function drawLongView() {
+  const s = LV, f = fb[s.id] || {};
+  const sh = document.getElementById("sheet");
+  const typed = document.getElementById("q")?.value || "";
+  const keepFocus = document.activeElement?.id === "q";
+  const btn = (label, pressed, onclick, disabled) => h("button", { type: "button", "aria-pressed": String(!!pressed), onclick, disabled: disabled || null, text: label });
+  sh.className = "sheet lv";
+  sh.replaceChildren(h("div", { class: "in" },
+    h("div", { class: "sbar" }, h("span", { class: "kicker sk", text: "The long view · analysis" }), h("button", { type: "button", class: "close", text: "Close", onclick: () => closeSheet(false) })),
+    h("p", { class: "meta", text: "The question: " + s.question }),
+    h("h2", { id: "sheet-title", text: s.title }),
+    h("p", { class: "standfirst", text: s.standfirst }),
+    h("div", { class: "lvbody" }, (s.body || []).map(par => h("p", { text: par }))),
+    s.claim ? h("div", { class: "claim" }, h("span", { class: "lbl", text: "The call that could prove wrong" }), s.claim) : null,
+    s.earlier_call ? h("p", { class: "changed" }, h("b", { text: "An earlier call: " }), s.earlier_call) : null,
+    s.second ? h("div", { class: "mnote" }, h("span", { class: "lbl", text: SECOND + "'s view" }), s.second.position,
+      s.second.exchange ? h("div", { class: "meta", text: "How the exchange went: " + s.second.exchange }) : null,
+      s.second.settle ? h("div", { class: "meta", text: "What would settle it: " + s.second.settle }) : null) : null,
+    s.agree?.length ? h("div", {}, h("span", { class: "lbl", text: "Where both agree" }), h("ul", { class: "deeper" }, s.agree.map(a => h("li", { text: a })))) : null,
+    s.reading?.length ? h("div", { class: "srcs" }, h("span", { class: "lbl", text: "Reading behind it, free to read" }),
+      s.reading.map(x => h("span", {}, h("a", { href: x.url, target: "_blank", rel: "noopener", text: x.title }), " · " + [x.author, x.outlet].filter(Boolean).join(", "),
+        x.note ? h("span", { class: "sub2", text: x.note }) : null))) : null,
+    s.draws_on?.length ? h("p", { class: "meta", text: "Draws on earlier stories: " + s.draws_on.join("; ") }) : null,
+    sample ? chatPanel(s, f) : null,
+    h("div", { class: "acts" },
+      btn(f.read ? "Read ✓" : "Read", f.read, () => save(s, { read: !f.read }), !db || !canWrite),
+      btn(f.liked ? "Liked ✓" : "Like", f.liked, () => save(s, { liked: !f.liked, skipped: false }), !db || !canWrite),
+      btn(f.skipped ? "Skipped ✓" : "Skip", f.skipped, () => save(s, { skipped: !f.skipped, liked: false }), !db || !canWrite),
+      btn("Discuss", false, () => { const q = document.getElementById("q"); q?.scrollIntoView({ block: "center" }); q?.focus(); }, !sample))
+  ));
+  const q = document.getElementById("q");
+  if (q && typed) q.value = typed;
+  if (q && keepFocus) q.focus();
+}
+
+function drawSheet() {
+  if (!openId) return;
+  if (byId[openId].s.kind === "long_view") return drawLongView();
+  const { s, sec } = byId[openId];
+  const f = fb[s.id] || {};
+  const c = s.coverage || {};
+  const sh = document.getElementById("sheet");
+  const typed = document.getElementById("q")?.value || "";
+  const keepFocus = document.activeElement?.id === "q";
+  const n = (s.sources || []).length, countries = [...new Set(c.countries || [])];
+  const btn = (label, pressed, onclick, disabled) => h("button", { type: "button", "aria-pressed": String(!!pressed), onclick, disabled: disabled || null, text: label });
+  sh.className = "sheet " + HUE[sec.id];
+  sh.replaceChildren(h("div", { class: "in" },
+    h("div", { class: "sbar" }, h("span", { class: "kicker sk", text: sec.name }), h("button", { type: "button", class: "close", text: "Close", onclick: () => closeSheet(false) })),
+    vis(s, "sheet"),
+    s.returning ? h("p", { class: "changed" }, h("b", { text: "Back since " + fmtDate(s.returning.since) + ". What changed: " }), s.returning.what_changed) : null,
+    h("h2", { id: "sheet-title", text: s.headline }),
+    s.key && s.photo?.src ? h("div", { class: "keyline" }, h("b", { text: s.key.value }), h("span", { text: s.key.label })) : null,
+    h("p", { text: s.summary }),
+    chart(s.visual),
+    h("div", { class: "cov" },
+      h("span", { class: "chip", text: n + (n === 1 ? " source" : " sources") + (countries.length ? " · " + countries.join(" ") : "") }),
+      [...new Set(c.kinds || [])].slice(0, 3).map(k => h("span", { class: "chip", text: k })),
+      c.split ? h("span", { class: "chip split", text: "Sources split" }) : null,
+      c.blind_spot ? h("span", { class: "chip blind", text: "Blind spot" }) : null,
+      s.second_differs ? h("span", { class: "chip second", text: SECOND + " differs" }) : null),
+    s.what_happened ? h("p", {}, h("span", { class: "lbl", text: "What happened" }), s.what_happened) : null,
+    s.why_it_matters ? h("p", {}, h("span", { class: "lbl", text: "Why it matters" }), s.why_it_matters) : null,
+    c.split ? h("div", {}, h("span", { class: "lbl", text: "Sources split on " + (c.split.topic || "this") }),
+      h("div", { class: "splitbox" }, h("div", {}, h("b", { text: c.split.a.source }), c.split.a.says), h("div", {}, h("b", { text: c.split.b.source }), c.split.b.says))) : null,
+    c.blind_spot ? h("p", { class: "meta" }, h("span", { class: "lbl", text: "Blind spot" }), c.blind_spot) : null,
+    s.my_read ? h("div", { class: "read" }, h("span", { class: "lbl", text: "My read (Claude's interpretation)" }), s.my_read) : null,
+    s.second_differs ? h("div", { class: "mnote" }, h("span", { class: "lbl", text: SECOND + " sees it differently" }), s.second_differs.note,
+      s.second_differs.would_change_mind ? h("div", { class: "meta", text: "What would settle it: " + s.second_differs.would_change_mind }) : null) : null,
+    h("div", { class: "srcs" }, h("span", { class: "lbl", text: "Sources" }),
+      (s.sources || []).map(x => h("span", {}, h("a", { href: x.url, target: "_blank", rel: "noopener", text: x.name }),
+        " · " + [x.kind, x.country].filter(Boolean).join(", ") + (x.basis && x.basis !== "read" ? " · " + x.basis + " only" : "")))),
+    sample ? chatPanel(s, f) : null,
+    h("div", { class: "acts" },
+      btn(f.read ? "Read ✓" : "Read", f.read, () => save(s, { read: !f.read }), !db || !canWrite),
+      btn(f.liked ? "Liked ✓" : "Like", f.liked, () => save(s, { liked: !f.liked, skipped: false }), !db || !canWrite),
+      btn(f.skipped ? "Skipped ✓" : "Skip", f.skipped, () => save(s, { skipped: !f.skipped, liked: false }), !db || !canWrite),
+      btn("Discuss", false, () => { const q = document.getElementById("q"); q?.scrollIntoView({ block: "center" }); q?.focus(); }, !sample))
+  ));
+  const q = document.getElementById("q");
+  if (q && typed) q.value = typed;
+  if (q && keepFocus) q.focus();
+}
+
+function chatPanel(s, f) {
+  const turns = f.chat || [];
+  return h("div", { class: "chat" },
+    h("span", { class: "lbl", text: "Discuss with Claude" }),
+    turns.map(t => h("div", { class: "msg" + (t.role === "user" ? " you" : "") }, t.content, t.by ? h("small", { text: TIER[t.by] || t.by }) : null)),
+    chatUi.pending != null ? h("div", { class: "msg", id: "pending", text: chatUi.pending || "Thinking…" }) : null,
+    chatUi.error ? h("div", { class: "meta", text: chatUi.error }) : null,
+    h("form", { onsubmit: e => { e.preventDefault(); ask(s, document.getElementById("q").value.trim()); } },
+      h("textarea", { id: "q", rows: 2, placeholder: "Ask about this story", "aria-label": "Your question about " + s.headline }),
+      h("button", { class: "send", type: "submit", text: "Ask", disabled: chatUi.busy || null })));
+}
+
+function chatRules(s) {
+  if (s.kind === "long_view") return "You are helping one reader discuss an analysis piece from their personal news briefing. About the reader: " + (E.reader || "not stated") + ". The piece is an argument, not settled fact: engage with it critically, say where it is weak, "
+    + "and keep what the evidence shows apart from interpretation. You cannot browse. Keep answers under 180 words unless they ask for more. Write plainly.\n\n"
+    + "QUESTION: " + s.question + "\nTITLE: " + s.title + "\nARGUMENT:\n" + (s.body || []).join("\n")
+    + (s.claim ? "\nTHE CALL THAT COULD PROVE WRONG: " + s.claim : "")
+    + (s.second ? "\nA SECOND MODEL (" + SECOND + ") ARGUED: " + s.second.position : "");
+  const c = s.coverage || {};
+  return "You are helping one reader discuss a story from their personal news briefing. About the reader: " + (E.reader || "not stated") + ". You know only the story below and your own background knowledge. You cannot browse, "
+    + "so say so when asked about anything after the story. Separate what the sources say from your own interpretation. "
+    + "Keep answers under 150 words unless they ask for more. Write plainly. "
+    + "If their message is a request or an instruction rather than a question (for example 'add this company to my list' or 'more like this'), "
+    + "say in one line that it is saved for the next edition and do not analyse the story.\n\n"
+    + "STORY (edition " + E.edition + "): " + s.headline + "\nSummary: " + s.summary
+    + "\nWhat happened: " + (s.what_happened || "") + "\nWhy it matters: " + (s.why_it_matters || "")
+    + "\nThe briefing's read: " + (s.my_read || "")
+    + (c.split ? "\nSources disagree on " + c.split.topic + ": " + c.split.a.source + " says " + c.split.a.says + "; " + c.split.b.source + " says " + c.split.b.says : "")
+    + "\nSources: " + (s.sources || []).map(x => x.name).join(", ");
+}
+
+async function ask(s, q) {
+  const f = fb[s.id] || {};
+  if (!q || chatUi.busy || !sample) return;
+  const turns = [...(f.chat || []), { role: "user", content: q }];
+  chatUi.busy = true; chatUi.pending = ""; chatUi.error = null;
+  document.getElementById("q").value = "";
+  save(s, { chat: turns, discussed: (f.discussed || 0) + 1 });
+  try {
+    const res = await sample([{ role: "user", content: chatRules(s) }, ...turns.map(t => ({ role: t.role, content: t.content }))], {
+      cache: false,
+      onText: ({ text }) => { chatUi.pending = text; const el = document.getElementById("pending"); if (el) el.textContent = text; }
+    });
+    chatUi.pending = null;
+    save(s, { chat: [...turns, { role: "assistant", content: res.text, by: res.modelTierApplied }].slice(-30) });
+  } catch (e) {
+    chatUi.pending = null;
+    if (e.text) save(s, { chat: [...turns, { role: "assistant", content: e.text + " [cut off]" }] });
+    chatUi.error = e.code === "not_granted" || e.code === "sampling_disabled" ? "Chat is off for this page. Allow Claude in the page's permissions to use it."
+      : e.code === "rate_limited" ? "Too many questions at once, or your Claude usage limit is reached. Try again later."
+      : e.code === "session_expired" ? "Sign in to Claude again, then ask once more."
+      : e.code === "cancelled" ? null : "That answer did not come through. Ask again.";
+  } finally { chatUi.busy = false; if (openId === s.id) drawSheet(); }
+}
+
+/* ---------- saving ---------- */
+function save(s, patch) {
+  if (!db || !canWrite) return;
+  const { sec } = byId[s.id];
+  fb[s.id] = { ...(fb[s.id] || {}), ...patch, edition: E.edition, story: s.id, section: sec.id, tags: s.tags, title: s.headline, updatedAt: new Date().toISOString() };
+  const row = fb[s.id];
+  refreshTile(s.id); if (openId === s.id) drawSheet();
+  chain[s.id] = (chain[s.id] || Promise.resolve()).then(async () => {
+    try { await db.collection("feedback").doc(E.edition + "__" + s.id).set(row); }
+    catch (e) {
+      dbState = e.code === "invalid_argument" ? "Taps cannot be saved for you on this page." : "A tap did not save. Tap again.";
+      if (e.code === "invalid_argument") canWrite = false;
+      setStatus(); if (openId === s.id) drawSheet();
+    }
+  });
+}
+function setStatus() { const el = document.getElementById("status"); if (el) el.textContent = dbState; }
+
+/* ---------- start ---------- */
+draw();
+document.addEventListener("keydown", e => { if (e.key === "Escape" && openId) closeSheet(false); });
+document.addEventListener("visibilitychange", () => {
+  // Leaving the app with a story open: bank the reading time so far, restart the clock on return.
+  if (!openId) return;
+  if (document.visibilityState === "hidden") {
+    const secs = Math.round((Date.now() - openedAt) / 1000);
+    if (secs >= 3) save(byId[openId].s, { seconds: Math.min(3600, ((fb[openId] || {}).seconds || 0) + secs) });
+    openedAt = Date.now();
+  } else openedAt = Date.now();
+});
+window.addEventListener("hashchange", () => {
+  const id = location.hash.slice(1);
+  if (byId[id] && id !== openId) openSheet(id);
+  else if (!byId[id] && openId) closeSheet(true);
+});
+if (byId[location.hash.slice(1)]) openSheet(location.hash.slice(1));
+
+(async () => {
+  try { db = await claude.use("db"); } catch { db = null; }
+  if (!db) { dbState = "Taps are not saved in this view."; setStatus(); return; }
+  const timer = setTimeout(() => { dbState = "Cannot reach your saved taps yet."; setStatus(); }, 10000);
+  db.collection("feedback").where("edition", "==", E.edition).onSnapshot(snap => {
+    for (const d of snap.docs) { const r = d.data(); if (r?.story === "next-question") pick = r.pick || null; else if (r?.story && byId[r.story]) fb[r.story] = r; }
+    if (!snap.metadata.fromCache) { clearTimeout(timer); dbState = "Your taps are saved."; }
+    for (const ch of snap.docChanges()) { const id = ch.doc.data()?.story; if (id && byId[id]) refreshTile(id); }
+    if (openId) drawSheet();
+    redrawPicker();
+    setStatus();
+  }, e => { clearTimeout(timer); dbState = "Saved taps stopped loading (" + e.code + "). Reload the page."; setStatus(); });
+  if (openId) drawSheet();
+})();
+
+(async () => {
+  try { sample = await claude.use("sample"); } catch { sample = null; }
+  if (openId) drawSheet();
+})();
+</script>

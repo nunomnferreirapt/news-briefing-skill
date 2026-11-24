@@ -1,0 +1,22 @@
+[project]
+name = "news-briefing-skill"
+version = "0.1.0"
+description = "A Claude Code skill that builds a personal news briefing for the phone, checked by a second model and tuned by what you read."
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Nuno Ferreira" }]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/nunomnferreirapt/news-briefing-skill"
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

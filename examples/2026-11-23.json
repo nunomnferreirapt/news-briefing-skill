@@ -1,0 +1,936 @@
+{
+ "edition": "2026-11-23",
+ "title": "Evening briefing, Monday 23 Nov 2026",
+ "covers": "Mon 23 Nov, 12:00 to 21:30",
+ "compiled": "2026-11-23T22:30:00+01:00",
+ "read_minutes": 11,
+ "lead": [
+  "nvidia-reinstates-huang",
+  "eu-22nd-sanctions",
+  "lego-estarreja"
+ ],
+ "big_picture": "One board decision in California undid half of last week's market crash, while Europe tightened the screws on Russia and Moscow pointed its threats at Estonia. Closer to home, Brussels joins The Hague and Lisbon in a fight over who gets to write the budget.",
+ "sections": [
+  {
+   "id": "world",
+   "name": "World",
+   "stories": [
+    {
+     "id": "eu-22nd-sanctions",
+     "tags": [
+      "eu-politics",
+      "ukraine-war",
+      "economy"
+     ],
+     "headline": "EU proposes cutting 60 Russian banks from SWIFT",
+     "key": {
+      "value": "60",
+      "label": "Russian banks to be cut from SWIFT"
+     },
+     "summary": "Ursula von der Leyen presented the EU's 22nd sanctions package against Russia. It goes after banks, crypto and services, and still needs all 27 member states to agree.",
+     "what_happened": "The package extends the transaction ban to about 60 Russian banks and removes all of them from SWIFT. It targets crypto and payment networks and third countries that help Russia evade sanctions, and widens the energy-services ban so EU firms cannot build, run or repair Russian refineries. It would also ban tankers insured in Russia, stop Russian teams competing under their flag at EU sports events, tighten visas, and bar EU citizens from the boards of Russian companies.",
+     "why_it_matters": "It is the heaviest financial step in months, coming while Ukraine strikes Russian shipping far from the front. Kaja Kallas said the EU \"will continue to propose new sanctions until Russia demonstrates a genuine willingness\".",
+     "my_read": "This package goes after money and know-how rather than goods: banks, crypto, refinery maintenance. Unanimity is the hurdle, and Hungary's government under Péter Magyar has not yet been tested on a package this size.",
+     "returning": null,
+     "photo": {
+      "page": "https://www.eunews.it/en/2026/11/23/energy-sporting-events-and-veterans-von-der-leyen-unveils-the-22nd-package-of-sanctions-against-russia",
+      "credit": "European Commission"
+     },
+     "visual": null,
+     "coverage": {
+      "kinds": [
+       "state media",
+       "newspaper",
+       "public broadcaster"
+      ],
+      "countries": [
+       "TR",
+       "IT",
+       "FR"
+      ],
+      "split": {
+       "topic": "the shadow fleet",
+       "a": {
+        "source": "Anadolu",
+        "says": "More than 70 additional shadow-fleet vessels are listed."
+       },
+       "b": {
+        "source": "Eunews",
+        "says": "70 shadow-fleet vessels are already on the EU list."
+       }
+      },
+      "blind_spot": null
+     },
+     "sources": [
+      {
+       "name": "Anadolu Agency",
+       "url": "https://aa.com.tr/en/europe/european-commission-presents-latest-sanctions-package-against-russia/4134832",
+       "kind": "state media",
+       "country": "TR",
+       "basis": "read"
+      },
+      {
+       "name": "Eunews",
+       "url": "https://www.eunews.it/en/2026/11/23/energy-sporting-events-and-veterans-von-der-leyen-unveils-the-22nd-package-of-sanctions-against-russia",
+       "kind": "newspaper",
+       "country": "IT",
+       "basis": "read"
+      },
+      {
+       "name": "France 24",
+       "url": "https://www.france24.com/en/europe/20261123-live-russian-strikes-kill-at-least-15-people-in-kyiv-region-ukraine-says",
+       "kind": "public broadcaster",
+       "country": "FR",
+       "basis": "read"
+      }
+     ],
+     "angle": "policy",
+     "second_differs": null
+    },
+    {
+     "id": "russia-estonia-nato",
+     "tags": [
+      "ukraine-war",
+      "diplomacy"
+     ],
+     "headline": "Russia threatens Estonia with \"open war\"; NATO answers Poland with an AWACS",
+     "key": {
+      "value": "1 Dec",
+      "label": "Estonia closes its Russian border"
+     },
+     "summary": "Moscow summoned Estonia's envoy and said Tallinn is \"on the verge of triggering open war\". NATO's council answered Friday's missiles in Poland with a surveillance plane.",
+     "what_happened": "Russia accused Estonia of letting Ukrainian drones use its airspace, obstructing Russian cargo ships in the Baltic and banning transit of Russian grain. Estonia denied the drone claim and will close its crossings with Russia from 1 December for at least six months, after an alleged Russian-linked arson attempt on an Estonian defence firm. Finland summoned Russia's ambassador over a suspected helicopter airspace violation on Saturday. After the North Atlantic Council met, NATO's top commander authorised the forward deployment of an AWACS early-warning aircraft to Poland.",
+     "why_it_matters": "It is Moscow's sharpest public threat against a NATO member in this cycle, on the same day NATO chose a measured answer to stray Russian missiles. The Baltic is becoming a second front at sea and in the air.",
+     "my_read": "NATO chose surveillance over escalation on Poland while Moscow escalated its words against Estonia. The next concrete test is Estonia's border closure on 1 December and how Russia answers it.",
+     "returning": {
+      "since": "2026-11-23",
+      "what_changed": "NATO's council met and sent an AWACS to Poland; Russia brought Estonia into its threats."
+     },
+     "photo": {
+      "page": "https://www.aljazeera.com/news/2026/11/23/russia-threatens-hostile-estonia-with-open-war",
+      "credit": "Al Jazeera / Reuters"
+     },
+     "visual": {
+      "type": "timeline",
+      "items": [
+       {
+        "date": "Fri 20 Nov",
+        "text": "Russian missiles land in south-east Poland"
+       },
+       {
+        "date": "Sat 21 Nov",
+        "text": "Cargo ship hit in the Gulf of Finland; suspected Russian helicopter over Finland"
+       },
+       {
+        "date": "Mon 23 Nov",
+        "text": "Russia summons Estonia's envoy; Finland summons Russia's; NATO sends an AWACS to Poland"
+       },
+       {
+        "date": "Tue 1 Dec",
+        "text": "Estonia closes its border with Russia"
+       }
+      ]
+     },
+     "coverage": {
+      "kinds": [
+       "newspaper",
+       "public broadcaster",
+       "wire agency"
+      ],
+      "countries": [
+       "QA",
+       "IE",
+       "FR",
+       "US"
+      ],
+      "split": {
+       "topic": "what landed in Poland",
+       "a": {
+        "source": "NBC News (Reuters), Monday",
+        "says": "Three Russian Kh-101 missiles."
+       },
+       "b": {
+        "source": "AP, Friday (this morning's edition)",
+        "says": "Two missiles and a suspected drone."
+       }
+      },
+      "blind_spot": null
+     },
+     "sources": [
+      {
+       "name": "Al Jazeera",
+       "url": "https://www.aljazeera.com/news/2026/11/23/russia-threatens-hostile-estonia-with-open-war",
+       "kind": "state media",
+       "country": "QA",
+       "basis": "read"
+      },
+      {
+       "name": "RTÉ (AFP)",
+       "url": "https://www.rte.ie/news/world/2026/1123/1600353-russia-estonia-finland/",
+       "kind": "public broadcaster",
+       "country": "IE",
+       "basis": "read"
+      },
+      {
+       "name": "France 24",
+       "url": "https://www.france24.com/en/europe/20261123-finland-summons-russian-ambassador-after-suspected-airspace-violation",
+       "kind": "public broadcaster",
+       "country": "FR",
+       "basis": "read"
+      },
+      {
+       "name": "NBC News (Reuters)",
+       "url": "https://nbcnews.com/world/russia/poland-nato-early-warning-aircraft-russia-missiles-cross-border-rcna610957",
+       "kind": "newspaper",
+       "country": "US",
+       "basis": "read"
+      }
+     ],
+     "angle": "conflict",
+     "second_differs": null
+    },
+    {
+     "id": "belgium-austerity-budget",
+     "tags": [
+      "eu-politics",
+      "economy"
+     ],
+     "headline": "Brussels marches against cuts as De Wever says his government could end",
+     "key": {
+      "value": "50,000",
+      "label": "marchers in Brussels, police count"
+     },
+     "summary": "A national strike grounded Belgian flights and about 50,000 people marched in Brussels against austerity. Prime Minister Bart De Wever said that without a budget deal before 1 January his government \"will end its existence\".",
+     "what_happened": "Budget talks with his deputy prime ministers failed on Monday morning because one coalition partner rejected the proposed balance; local media named the Flemish socialists, Vooruit. King Philippe, who refused De Wever's resignation on 6 November, told him to persevere. Riot police used tear gas and water cannon on some protesters and a vehicle was set on fire.",
+     "why_it_matters": "The five-party coalition is trying to save about €10 billion by 2029 to cut a high deficit. From 1 January a stopgap regime of provisional monthly spending takes over if there is no budget.",
+     "my_read": "This is the third government on today's page fighting to get a budget through, after The Hague and Lisbon. Belgium's is the most fragile: here the deadline is set by the prime minister himself.",
+     "returning": null,
+     "photo": {
+      "page": "https://www.bangkokpost.com/world/3359891/new-belgium-protests-as-embattled-government-sets-budget-deadline",
+      "credit": "AFP"
+     },
+     "visual": null,
+     "coverage": {
+      "kinds": [
+       "wire agency",
+       "state media"
+      ],
+      "countries": [
+       "TH",
+       "CN"
+      ],
+      "split": null,
+      "blind_spot": "Read only through AFP (in the Bangkok Post) and Xinhua; no Belgian outlet was read."
+     },
+     "sources": [
+      {
+       "name": "AFP via Bangkok Post",
+       "url": "https://www.bangkokpost.com/world/3359891/new-belgium-protests-as-embattled-government-sets-budget-deadline",
+       "kind": "wire agency",
+       "country": "TH",
+       "basis": "read"
+      },
+      {
+       "name": "Xinhua",
+       "url": "https://english.news.cn/20261123/525d58e50f714b1086e5f0fac5971466/c.html",
+       "kind": "state media",
+       "country": "CN",
+       "basis": "read"
+      }
+     ],
+     "angle": "policy",
+     "second_differs": null
+    }
+   ],
+   "briefs": [
+    {
+     "text": "Tajikistan told the UN it will leave the International Criminal Court, the fourth country to start leaving since Washington urged exits in July.",
+     "sources": [
+      {
+       "name": "Al Jazeera",
+       "url": "https://www.aljazeera.com/news/2026/11/23/tajikistan-moves-to-leave-icc-amid-us-push-against-court"
+      }
+     ],
+     "basis": "read"
+    }
+   ]
+  },
+  {
+   "id": "tech",
+   "name": "Tech & AI",
+   "stories": [
+    {
+     "id": "nvidia-reinstates-huang",
+     "tags": [
+      "chips",
+      "ai-finance"
+     ],
+     "headline": "Nvidia brings back Jensen Huang and the stock jumps a third",
+     "key": {
+      "value": "+32%",
+      "label": "Nvidia on Monday, before the US close"
+     },
+     "summary": "Eleven days after he resigned, Nvidia's board unanimously reinstated Jensen Huang as CEO. The stock rose about a third and Wall Street recovered about half of last week's fall.",
+     "what_happened": "The board cited Huang's \"candor\" and \"input from senior levels of the United States government\", and said he \"poses no national security risk\". It set up a national security and export control committee and started a search for a chief compliance officer; the independent investigation continues. Trump told CNBC he spoke to the board and \"convinced them\". The S&P 500 was up about 5% and on course for its best day since April 2025.",
+     "why_it_matters": "It ends the leadership vacuum at the company that sets the pace of AI hardware, and the gain alone added more than $1 trillion in market value. The SEC accounting look, the California attorney general and Congress are all still open: Huang gives a closed-door House interview on 1 December and testifies to the Senate Banking Committee on 3 December.",
+     "my_read": "Markets priced relief, not resolution. A CEO returning with open presidential backing is stronger for now, but it ties Nvidia's fortunes more tightly to Washington's China policy, the very issue behind the scandal.",
+     "returning": {
+      "since": "2026-11-23",
+      "what_changed": "The board reversed Huang's resignation; Nvidia recovered most of last week's fall in one day."
+     },
+     "photo": {
+      "page": "https://techcrunch.com/2026/11/23/trump-reportedly-called-into-nvidia-board-meeting-to-advocate-for-huangs-return/",
+      "credit": "AFP / Getty"
+     },
+     "visual": {
+      "type": "bars",
+      "caption": "Monday's moves at Yahoo Finance's intraday snapshot, before the close",
+      "unit": "%",
+      "items": [
+       {
+        "label": "Nvidia",
+        "value": 32.46
+       },
+       {
+        "label": "Nasdaq",
+        "value": 6.89
+       },
+       {
+        "label": "S&P 500",
+        "value": 5.1
+       },
+       {
+        "label": "Dow",
+        "value": 3.32
+       }
+      ]
+     },
+     "coverage": {
+      "kinds": [
+       "company",
+       "business press",
+       "newspaper",
+       "tech press"
+      ],
+      "countries": [
+       "US"
+      ],
+      "split": {
+       "topic": "why he is back",
+       "a": {
+        "source": "Nvidia's board",
+        "says": "Meetings left it \"satisfied with respect to Mr. Huang's candor\"."
+       },
+       "b": {
+        "source": "NBC News, TechCrunch (Semafor)",
+        "says": "Trump personally pressed the board and reportedly dialled into a meeting; NBC calls that highly unusual."
+       }
+      },
+      "blind_spot": null
+     },
+     "sources": [
+      {
+       "name": "Nvidia newsroom",
+       "url": "https://nvidianews.nvidia.com/news/nvidia-board-reinstates-jensen-huang-as-president-ceo-and-board-director",
+       "kind": "company",
+       "country": "US",
+       "basis": "read"
+      },
+      {
+       "name": "CNBC",
+       "url": "https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html",
+       "kind": "business press",
+       "country": "US",
+       "basis": "read"
+      },
+      {
+       "name": "NBC News",
+       "url": "https://www.nbcnews.com/tech/tech-news/nvidia-reinstates-jensen-huang-rcna610864",
+       "kind": "newspaper",
+       "country": "US",
+       "basis": "read"
+      },
+      {
+       "name": "Yahoo Finance",
+       "url": "https://finance.yahoo.com/markets/live/stock-market-today-monday-november-23-dow-sp-500-nasdaq-nvidia-reinstates-jensen-huang-141511975.html",
+       "kind": "business press",
+       "country": "US",
+       "basis": "read"
+      },
+      {
+       "name": "AP via WHDH",
+       "url": "https://whdh.com/news/us-stocks-soar-and-recover-more-than-half-of-last-weeks-plunge-after-jensen-huang-returns-to-nvidia/",
+       "kind": "wire agency",
+       "country": "US",
+       "basis": "read"
+      }
+     ],
+     "angle": "markets",
+     "second_differs": null
+    },
+    {
+     "id": "crowdstrike-zscaler",
+     "tags": [
+      "ai-industry",
+      "economy"
+     ],
+     "headline": "CrowdStrike to buy Zscaler for $44bn",
+     "key": {
+      "value": "$44bn",
+      "label": "all-stock deal"
+     },
+     "summary": "CrowdStrike will buy Zscaler in shares, the year's biggest cybersecurity deal, pitched as the control layer for companies' use of AI and agents.",
+     "what_happened": "CrowdStrike pays 1.135 of its own shares per Zscaler share, valuing the deal at $43.9bn. It joins endpoint security with Zscaler's zero-trust network platform; closing is expected in the second half of CrowdStrike's fiscal 2028, subject to regulators. CrowdStrike also reported revenue of $1.58bn against $1.53bn expected. Its shares fell about 10% and Zscaler's rose more than 15%.",
+     "why_it_matters": "Security vendors are consolidating and selling themselves as the way to \"deploy AI, control AI\", in George Kurtz's words. With a fixed share ratio, CrowdStrike's fall already shrinks what Zscaler holders receive.",
+     "my_read": "For anyone deploying agents in a company, the list of security vendors to choose from is getting shorter and the pitch is shifting from protecting devices to governing AI.",
+     "returning": null,
+     "photo": {
+      "page": "https://techcrunch.com/2026/11/23/crowdstrike-to-acquire-zscaler-for-44-billion/",
+      "credit": "Bloomberg / Getty"
+     },
+     "visual": null,
+     "coverage": {
+      "kinds": [
+       "business press",
+       "tech press"
+      ],
+      "countries": [
+       "US"
+      ],
+      "split": null,
+      "blind_spot": null
+     },
+     "sources": [
+      {
+       "name": "CNBC",
+       "url": "https://www.cnbc.com/2026/11/23/crowdstrike-zscaler-aquisition-ai-cyberattacks.html",
+       "kind": "business press",
+       "country": "US",
+       "basis": "read"
+      },
+      {
+       "name": "TechCrunch",
+       "url": "https://techcrunch.com/2026/11/23/crowdstrike-to-acquire-zscaler-for-44-billion/",
+       "kind": "tech press",
+       "country": "US",
+       "basis": "read"
+      }
+     ],
+     "angle": "deal",
+     "second_differs": {
+      "note": "CrowdStrike's 10% fall reads as the market doubting the deal, not only as a cheaper price for Zscaler holders.",
+      "would_change_mind": "Zscaler's own results and fuller coverage of how investors judged the deal."
+     }
+    },
+    {
+     "id": "deepmind-quantum-lean",
+     "tags": [
+      "ai-research"
+     ],
+     "headline": "DeepMind's agents find cheaper quantum algorithms, proven in Lean",
+     "key": {
+      "value": "11.8×",
+      "label": "cheaper fusion-fuel simulation"
+     },
+     "summary": "Teams of Gemini 4 agents cut the cost of quantum algorithms for fusion, chemistry and drug design. Every result was formally proved in Lean and the library is open-sourced.",
+     "what_happened": "Google DeepMind and Google Quantum AI ran separate agent teams per problem, sharing verified ideas in a common notebook. The fusion calculation became 11.8 times cheaper, with memory cut from 5,650 to 4,338 error-corrected qubits; a Cytochrome P450 simulation 2.5 times (481 to 333 qubits). The circuits are too large for today's machines, so the proofs are what show they work.",
+     "why_it_matters": "It is the second formally verified AI research result in a week, after the Riemann proof in this morning's edition. TNW notes a September DeepMind experiment in which 14% of agents cheated on Lean problems, which is why the proof checker matters.",
+     "my_read": "\"Agents plus a proof checker\" is turning into a method rather than a one-off. DeepMind's own caveat keeps it grounded: these algorithms still need more than the first error-corrected quantum computers are likely to offer.",
+     "returning": null,
+     "photo": null,
+     "visual": {
+      "type": "bars",
+      "caption": "How many times cheaper each algorithm became (DeepMind)",
+      "unit": "×",
+      "signed": false,
+      "items": [
+       {
+        "label": "Fusion fuel",
+        "value": 11.8
+       },
+       {
+        "label": "Light-sensitive molecule",
+        "value": 8
+       },
+       {
+        "label": "Grover search",
+        "value": 2.57
+       },
+       {
+        "label": "Cytochrome P450",
+        "value": 2.5
+       }
+      ]
+     },
+     "coverage": {
+      "kinds": [
+       "company",
+       "tech press"
+      ],
+      "countries": [
+       "UK",
+       "NL"
+      ],
+      "split": null,
+      "blind_spot": "Only the company's own blog and one tech outlet so far; no independent expert comment yet."
+     },
+     "sources": [
+      {
+       "name": "Google DeepMind",
+       "url": "https://deepmind.google/blog/finding-faster-quantum-algorithms-with-agents-and-formal-verification/",
+       "kind": "company",
+       "country": "UK",
+       "basis": "read"
+      },
+      {
+       "name": "TNW",
+       "url": "https://thenextweb.com/news/google-deepmind-gemini-agents-quantum-algorithms-lean",
+       "kind": "tech press",
+       "country": "NL",
+       "basis": "read"
+      }
+     ],
+     "angle": "research",
+     "second_differs": null
+    }
+   ],
+   "briefs": [
+    {
+     "text": "Sierra, Bret Taylor's AI customer-service agent company, raised $1.75bn at a $30bn valuation, double six months ago; it charges per resolved outcome, not per seat.",
+     "sources": [
+      {
+       "name": "TechCrunch",
+       "url": "https://techcrunch.com/2026/11/23/sierra-doubles-valuation-to-30b-within-six-months-as-demand-for-ai-in-cx-takes-off/"
+      },
+      {
+       "name": "TNW",
+       "url": "https://thenextweb.com/news/sierra-1-75b-series-f-30b-valuation-ai-agents"
+      }
+     ],
+     "basis": "read"
+    },
+    {
+     "text": "Amazon is paying about $7.5bn, by Bloomberg's figure, for Decart's software that runs AI models across Nvidia, Amazon and Google chips, ahead of selling its Trainium chips to outside customers.",
+     "sources": [
+      {
+       "name": "TNW",
+       "url": "https://thenextweb.com/news/amazon-decart-7-5bn-optimization-stack-founders-trainium"
+      },
+      {
+       "name": "TechCrunch",
+       "url": "https://techcrunch.com/2026/11/23/amazon-snaps-up-decarts-ai-optimization-tech-for-7-5b-as-it-prepares-to-sell-trainium-chips/"
+      }
+     ],
+     "basis": "read"
+    },
+    {
+     "text": "The Dutch privacy regulator advised consumers not to buy AI camera glasses after its own test produced harmful answers, stopping just short of a ban.",
+     "sources": [
+      {
+       "name": "TechCrunch",
+       "url": "https://techcrunch.com/2026/11/23/dutch-privacy-authority-urges-consumers-not-to-buy-pervert-glasses/"
+      }
+     ],
+     "basis": "read"
+    }
+   ]
+  },
+  {
+   "id": "home",
+   "name": "Netherlands & Portugal",
+   "stories": [
+    {
+     "id": "lego-estarreja",
+     "tags": [
+      "pt-economy"
+     ],
+     "headline": "Lego picks Estarreja for a factory with over 1,000 jobs",
+     "key": {
+      "value": "€1bn",
+      "label": "up to, invested by 2035"
+     },
+     "summary": "Lego will build its eighth factory worldwide, and fourth in Europe, in Estarreja in the Aveiro district. Construction starts in mid-2027 and the plant opens in 2030.",
+     "what_happened": "Lego's chief operating officer Carsten Rasmussen told Lusa the investment \"can reach\" €1bn by 2035 and the plant will employ \"1,000, or maybe a bit more\" skilled workers at full capacity. The 60-hectare site aims for fully renewable energy, about 80% of it made on site. Prime Minister Montenegro attended and told the licensing authorities: \"não me deixem ficar mal\", don't let me down.",
+     "why_it_matters": "It is one of the largest industrial greenfield projects in Portugal in years, and a test of how fast Portugal can license one.",
+     "my_read": "A vote of confidence in Portugal that lands the day before a budget vote the government no longer fully controls. Montenegro's plea to the licensing bodies names the real risk: permits, not money.",
+     "returning": null,
+     "photo": {
+      "page": "https://www.rtp.pt/noticias/economia/lego-investe-mil-milhoes-de-euros-e-cria-mil-empregos-em-fabrica-em-estarreja_n1781065",
+      "credit": "RTP"
+     },
+     "visual": {
+      "type": "timeline",
+      "items": [
+       {
+        "date": "Mid-2027",
+        "text": "Construction starts"
+       },
+       {
+        "date": "2030",
+        "text": "Factory opens"
+       },
+       {
+        "date": "2035",
+        "text": "Up to €1bn invested, about 1,000 jobs"
+       }
+      ]
+     },
+     "coverage": {
+      "kinds": [
+       "public broadcaster",
+       "business press"
+      ],
+      "countries": [
+       "PT"
+      ],
+      "split": {
+       "topic": "the size of the investment",
+       "a": {
+        "source": "RTP and Jornal Económico (Lusa)",
+        "says": "Up to €1bn, reached by 2035."
+       },
+       "b": {
+        "source": "Dinheiro Vivo",
+        "says": "Over €1bn in the coming years."
+       }
+      },
+      "blind_spot": null
+     },
+     "sources": [
+      {
+       "name": "RTP",
+       "url": "https://www.rtp.pt/noticias/economia/lego-investe-mil-milhoes-de-euros-e-cria-mil-empregos-em-fabrica-em-estarreja_n1781065",
+       "kind": "public broadcaster",
+       "country": "PT",
+       "basis": "read"
+      },
+      {
+       "name": "Jornal Económico (Lusa)",
+       "url": "https://jornaleconomico.sapo.pt/noticias/lego-investe-mil-milhoes-e-cria-mil-empregos-em-fabrica-em-estarreja/",
+       "kind": "business press",
+       "country": "PT",
+       "basis": "read"
+      },
+      {
+       "name": "Dinheiro Vivo",
+       "url": "https://dinheirovivo.dn.pt/empresas/no-me-deixem-ficar-mal-montenegro-pede-rapidez-no-licenciamento-da-lego-em-estarreja",
+       "kind": "business press",
+       "country": "PT",
+       "basis": "read"
+      }
+     ],
+     "angle": "deal",
+     "second_differs": null
+    },
+    {
+     "id": "catolica-poll",
+     "tags": [
+      "pt-politics",
+      "far-right"
+     ],
+     "headline": "Poll puts AD, PS and Chega in a three-way tie",
+     "key": {
+      "value": "26 · 25 · 23",
+      "label": "AD, PS and Chega, within the margin of error"
+     },
+     "summary": "The first Católica poll since July has AD and PS both falling and Chega closing in, the night before the final budget vote.",
+     "what_happened": "The CESOP–Católica poll for RTP, Antena 1 and Público puts AD at 26% (29% in July), PS at 25% (29%) and Chega at 23% (21%), with a margin of error of 3.4 points. 62% say the country is worse off than a year ago, up from 51% four months ago, and housing is the top concern. Fieldwork ran 13 to 19 November.",
+     "why_it_matters": "It shows what Montenegro would risk if he answered the PS–Chega budget rewrite by calling an election. Both centre parties lose ground while Chega gains.",
+     "my_read": "With the three largest parties tied, an early election is a gamble for everyone. That makes it more likely the budget passes tomorrow and the fight carries on inside parliament.",
+     "returning": {
+      "since": "2026-11-23",
+      "what_changed": "A new poll on the eve of the budget vote this morning's edition previewed."
+     },
+     "photo": {
+      "page": "https://www.rtp.pt/noticias/politica/sondagem-da-catolica-aponta-para-empate-tecnico-entre-os-tres-maiores-partidos_n1781126",
+      "credit": "RTP"
+     },
+     "visual": {
+      "type": "bars",
+      "caption": "CESOP–Católica, November (July in brackets)",
+      "unit": "%",
+      "signed": false,
+      "items": [
+       {
+        "label": "AD (29)",
+        "value": 26
+       },
+       {
+        "label": "PS (29)",
+        "value": 25
+       },
+       {
+        "label": "Chega (21)",
+        "value": 23
+       },
+       {
+        "label": "IL (8)",
+        "value": 9
+       },
+       {
+        "label": "CDU (3)",
+        "value": 5
+       },
+       {
+        "label": "Livre (6)",
+        "value": 5
+       },
+       {
+        "label": "BE (2)",
+        "value": 3
+       }
+      ]
+     },
+     "coverage": {
+      "kinds": [
+       "public broadcaster"
+      ],
+      "countries": [
+       "PT"
+      ],
+      "split": null,
+      "blind_spot": "Carried so far only by the outlets that commissioned it."
+     },
+     "sources": [
+      {
+       "name": "RTP",
+       "url": "https://www.rtp.pt/noticias/politica/sondagem-da-catolica-aponta-para-empate-tecnico-entre-os-tres-maiores-partidos_n1781126",
+       "kind": "public broadcaster",
+       "country": "PT",
+       "basis": "read"
+      },
+      {
+       "name": "RTP / Antena 1",
+       "url": "https://www.rtp.pt/noticias/noticiario-antena1/20h-ad-lidera-mas-ha-empate-tecnico-com-ps-e-chega-sondagem_a1_1781154",
+       "kind": "public broadcaster",
+       "country": "PT",
+       "basis": "headline"
+      }
+     ],
+     "angle": "politics-poll",
+     "second_differs": null
+    },
+    {
+     "id": "erasmus-mc-icu",
+     "tags": [
+      "nl-society"
+     ],
+     "headline": "Inspectorate steps in at Erasmus MC intensive care; Gommers quits as head",
+     "key": {
+      "value": "1.5 years",
+      "label": "of investigation after a whistleblower"
+     },
+     "summary": "The Dutch health inspectorate found a situation at Erasmus MC's intensive care unit that could seriously threaten patient safety. Diederik Gommers stepped down as department head at once.",
+     "what_happened": "The inspectorate (IGJ) found staff lacked the safety to speak up, managers focused on finding anonymous critics, and the hospital board ignored a 2025 warning from the intensivists' association. The report found no proven link to patient incidents. The board is now under intensified supervision; the ICU training programme, the country's largest, has been under intensive supervision since March.",
+     "why_it_matters": "Gommers was the face of Dutch intensive care during Covid, and Erasmus MC is one of the country's leading academic hospitals. Supervising a hospital board itself is unusual.",
+     "my_read": "By putting the board under supervision, the inspectorate says the problem is governance, not one doctor. Expect other academic hospitals to look hard at how they treat internal critics.",
+     "returning": null,
+     "photo": {
+      "page": "https://nos.nl/artikel/2640739-inspectie-grijpt-in-bij-ic-erasmus-mc-vanwege-mogelijke-risico-s-voor-patienten-gommers-stopt-als-afdelingshoofd",
+      "credit": "NOS"
+     },
+     "visual": null,
+     "coverage": {
+      "kinds": [
+       "public broadcaster"
+      ],
+      "countries": [
+       "NL"
+      ],
+      "split": null,
+      "blind_spot": "A NOS/Nieuwsuur scoop; no second outlet was read."
+     },
+     "sources": [
+      {
+       "name": "NOS / Nieuwsuur",
+       "url": "https://nos.nl/artikel/2640739-inspectie-grijpt-in-bij-ic-erasmus-mc-vanwege-mogelijke-risico-s-voor-patienten-gommers-stopt-als-afdelingshoofd",
+       "kind": "public broadcaster",
+       "country": "NL",
+       "basis": "read"
+      }
+     ],
+     "angle": "decision",
+     "second_differs": null
+    }
+   ],
+   "briefs": [
+    {
+     "text": "A court in The Hague barred BYD from selling its Ti7 SUV anywhere in the EU for copying the Land Rover Defender's design; BYD will appeal, and the UK is not covered. The ruling came on Friday.",
+     "sources": [
+      {
+       "name": "Euronews",
+       "url": "https://www.euronews.com/2026/11/23/dutch-court-bans-byd-model-from-eu-over-likeness-to-land-rovers-defender"
+      }
+     ],
+     "basis": "read"
+    }
+   ]
+  }
+ ],
+ "threads": [
+  {
+   "when": "Tue 24 Nov",
+   "what": "Final vote on Portugal's 2027 budget. Second day of the Dutch regional transport strike."
+  },
+  {
+   "when": "24–25 Nov",
+   "what": "Full stoppage days in the CP train strike; it ends Fri 27 Nov."
+  },
+  {
+   "when": "Tue 1 Dec",
+   "what": "Estonia closes its border with Russia. Huang's closed-door interview with the House."
+  },
+  {
+   "when": "Thu 3 Dec",
+   "what": "Huang testifies publicly to the Senate Banking Committee."
+  },
+  {
+   "when": "6 Dec",
+   "what": "Eisenkot's deadline to form an Israeli government."
+  },
+  {
+   "when": "~20 Dec",
+   "what": "Buma's advice to the Dutch minority cabinet."
+  },
+  {
+   "when": "31 Dec",
+   "what": "Belgium's budget deadline before provisional spending starts on 1 Jan."
+  },
+  {
+   "when": "Open",
+   "what": "Whether all 27 EU states sign the 22nd sanctions package."
+  }
+ ],
+ "deeper": [
+  "What does charging per outcome, as Sierra does, change about how AI agent work gets sold?",
+  "How unusual is a president shaping a private company's board, and what does it mean for Nvidia's open probes?",
+  "Why are Belgium, the Netherlands and Portugal all struggling to pass budgets at once?"
+ ],
+ "making_of": {
+  "limits": "The Guardian, DW, The Verge, Ars Technica, NU.nl and RTL could not be read; Reuters, Bloomberg, FT and Semafor are used only as carried by others. Market figures are intraday, before the US close. The Belgium story rests on AFP and Xinhua; no Belgian outlet was read.",
+  "second": {
+   "model": "mistral-large-4-0",
+   "blind_scan": {
+    "ran": true,
+    "stories": 13,
+    "only_second_kept": [
+     "belgium-austerity-budget"
+    ],
+    "only_second_dropped": 3
+   },
+   "selection": {
+    "ran": true,
+    "followed": 6,
+    "overruled": 3
+   },
+   "draft_check": {
+    "ran": true,
+    "flags": 4,
+    "acted_on": 4
+   }
+  }
+ },
+ "long_view": {
+  "question": "Belgium, the Netherlands and Portugal are all fighting over their budgets this month. Coincidence, or the same cause?",
+  "title": "Three budget fights, two different problems",
+  "standfirst": "Belgium is fighting over money. The Netherlands and Portugal are fighting over who holds the pen. What they share is a parliament in which nobody is big enough to govern.",
+  "read_minutes": 3,
+  "body": [
+   "Three governments within a few hours of Amsterdam are stuck on next year's budget in the same week. The easy reading is that Europe can no longer pay its bills; an Economist headline this autumn says as much: \"Europe has been living beyond its means. Now the bills are due.\" (I could read only its first paragraph.)",
+   "That reading fits Belgium and only Belgium. The European Commission expects a Belgian deficit of 5.5% of GDP in 2027 and debt of 113%. The country is in the EU's excessive deficit procedure and has to find about €10 billion by 2029. Its coalition holds 82 of 150 seats, a majority on paper, so the fight is inside the government: five parties arguing over who pays. Research by Philipp Heimberger and Anna Matzner on 17 rich countries finds that cutting one point of GDP raises the chance of a major government crisis by 17.5 points. Belgium is that finding in real time.",
+   "The Netherlands and Portugal are not short of money. The Commission sees a Dutch deficit of 2.1% with debt at 46%, and a Portuguese budget close to balance with debt falling to 83%. Their fights are about who writes the budget. The Dutch cabinet holds 66 of 150 seats; its tax plan was rewritten by two of its own parties together with the opposition, and the third coalition party voted against its own government. The Portuguese government holds 91 of 230; parliament passed 113 amendments against it, four in five of them from the left.",
+   "What the three share sits one level down. The largest party won 17% of the vote in Belgium, 17% in the Netherlands and 32% in Portugal. In each, a radical-right party holds 20, 26 and 60 seats and sits outside the government. Take those seats out of the arithmetic and what is left is either a five-party coalition that took 239 days to form, or a minority cabinet. The budget is the one vote a government cannot avoid, so that is where a weak grip on parliament shows. November is only the calendar.",
+   "The difference matters for what comes next. A power problem has procedural answers. Rob Jetten has asked Sybrand Buma for rules on how his cabinet agrees budgets with parliament, and said, \"I think we are all discovering how a minority cabinet can work well.\" Leiden scholars argue such cabinets can build a different majority for each issue, and that five-party cabinets serve 54% of their term against 65% for two-party ones: \"not dramatic\". Portugal's parliament may not even have changed the bottom line. The opposition says the balance is the same; the finance minister reportedly sees a 0.7% deficit; nobody has published a costing.",
+   "A money problem has no procedural answer. Somebody pays. That is why Belgium's is the dangerous fight of the three, and why the other two look more like a new normal: the government proposes, parliament writes. Slower and noisier than before, and not obviously worse."
+  ],
+  "claim": "Neither the Dutch nor the Portuguese government falls over its 2027 budget before 31 January 2027. If one of the three goes by then, it is Belgium's.",
+  "agree": [
+   "The shared root: a largest party too small to govern, and a large radical-right bloc outside government.",
+   "The budget is where it shows because it is the one vote no government can dodge.",
+   "The missing fact is a costing of Portugal's 113 amendments."
+  ],
+  "earlier_call": null,
+  "reading": [
+   {
+    "title": "Austerity erodes the governments that impose it",
+    "author": "Philipp Heimberger and Anna Matzner",
+    "outlet": "Social Europe, May 2026",
+    "url": "https://www.socialeurope.eu/austerity-erodes-the-governments-that-impose-it",
+    "note": "Cuts themselves destabilise governments: the case that money, not fragmentation, is the cause."
+   },
+   {
+    "title": "How minority governments could benefit the Netherlands",
+    "author": "Corné Smit",
+    "outlet": "Leiden University, Sep 2025",
+    "url": "https://www.universiteitleiden.nl/en/news/2025/09/how-minority-governments-could-benefit-the-netherlands",
+    "note": "Minority cabinets can build a different majority per issue; broad coalitions often achieve less."
+   },
+   {
+    "title": "Meer partijen, meer polderen: zo blijft Nederland bestuurbaar",
+    "author": "Wim Voermans",
+    "outlet": "Leiden University summary of an NRC interview, Nov 2025",
+    "url": "https://www.universiteitleiden.nl/in-de-media/2025/11/meer-partijen-meer-polderen---zo-blijft-nederland-bestuurbaar",
+    "note": "Fragmentation forces compromise; many-party cabinets last only a little less long."
+   },
+   {
+    "title": "Europe's fractured politics and what they reveal about democracy",
+    "author": "E.J. Dionne Jr.",
+    "outlet": "Brookings, June 2026",
+    "url": "https://www.brookings.edu/articles/europes-fractured-politics-and-what-they-reveal-about-democracy/",
+    "note": "Splits across the middle have mostly helped the far right."
+   },
+   {
+    "title": "Europe's fracture line: political fragmentation in the EU",
+    "author": "Victoria Cano Acha",
+    "outlet": "Atlas Institute, July 2026",
+    "url": "https://atlasinstitute.org/europes-fracture-line-political-fragmentation-in-the-eu/",
+    "note": "Chronic instability rather than collapse: \"neither collapse nor resolution but persistence\"."
+   },
+   {
+    "title": "Europe has been living beyond its means. Now the bills are due",
+    "author": "",
+    "outlet": "The Economist, via Der Standard",
+    "url": "https://www.derstandard.at/story/3000000349122/europe-has-been-living-beyond-its-means-now-the-bills-are-due",
+    "note": "Paywalled: headline and first paragraph only. The reading this piece argues against for two of the three countries."
+   }
+  ],
+  "draws_on": [
+   "The Dutch minority cabinet hires a referee (23 Nov)",
+   "Portugal's 2027 budget reaches its final vote (23 Nov)",
+   "Brussels marches against cuts (23 Nov evening)",
+   "Poll puts AD, PS and Chega in a three-way tie (23 Nov evening)"
+  ],
+  "tags": [
+   "eu-politics",
+   "nl-politics",
+   "pt-politics",
+   "long-view"
+  ],
+  "second": {
+   "position": "One structural cause, not coincidence: in all three, the largest party lacks a majority and the radical right is excluded, so governments survive on shifting issue-by-issue majorities — and the budget, the vote none can dodge, is where that shows. Belgium adds EU deficit pressure; the calendar explains only November.",
+   "exchange": "Writing blind from the same evidence, Mistral called it one cause, fragmentation. After reading both takes it dropped that label, since Portugal has 3.6 effective parties against Belgium's 9.2 and the Netherlands' 8.2, and accepted the money-versus-power split as the better reading of the triggers. I accept its point that Belgium's deficit sits on top of the same structure. What is left between us: Mistral sees one phenomenon with an extra layer in Belgium; I think the layer decides who survives.",
+   "settle": "A costing of Portugal's amendments (an unchanged balance means pure power; a 0.7% deficit means money too), and whether Belgium has a 2027 budget by 1 January. Mistral's own call: it will not."
+  }
+ },
+ "next_questions": [
+  {
+   "id": "q-proof-checkers",
+   "question": "Is \"AI agents plus a proof checker\" a new way of doing science, or two well-publicised one-offs?",
+   "why": "The Riemann proof and DeepMind's quantum algorithms landed in the same week."
+  },
+  {
+   "id": "q-washington-chips",
+   "question": "How far does Washington now run the AI chip industry?",
+   "why": "A president helped reinstate Nvidia's CEO days after threatening a ban on data centres abroad."
+  },
+  {
+   "id": "q-agent-money",
+   "question": "Where is the money in AI agents really going?",
+   "why": "Sierra at $30bn on outcome pricing, CrowdStrike buying Zscaler, Amazon buying Decart: three bets in one day."
+  }
+ ],
+ "learn": false,
+ "masthead": "Briefing · Amsterdam",
+ "reader": "a manager living in Amsterdam, Portuguese, interested in AI and technology, European and world politics, and the Netherlands and Portugal",
+ "second_editor": "Mistral"
+}
