@@ -14,6 +14,16 @@ The 23 Nov 2026 evening edition at phone width: the front page, an opened story,
 
 ## What it does
 
+Key:
+
+```mermaid
+flowchart LR
+    K1(["You decide or act"]):::human ~~~ K2["A step run by Claude, Mistral or a script"]:::sys ~~~ K3["What you get"]:::out
+    classDef sys fill:#1f3a5f,stroke:#7aa2d8,color:#ffffff
+    classDef human fill:#6b4514,stroke:#e0a95a,color:#ffffff
+    classDef out fill:#1e4d3a,stroke:#6fcf97,color:#ffffff
+```
+
 ```mermaid
 %%{init: {"flowchart": {"wrappingWidth": 600, "nodeSpacing": 30, "rankSpacing": 32}}}%%
 flowchart TB
@@ -36,19 +46,11 @@ flowchart TB
     B --> P["One private page: front page, stories, long view"]:::out
     P --> T(["You read, like, skip, ask"]):::human
     T -. "taps feed the next run" .-> R0
-    subgraph KEY["Key"]
-        direction LR
-        K1(["You decide or act"]):::human
-        K2["A step run by Claude, Mistral or a script"]:::sys
-        K3["What you get"]:::out
-        K1 ~~~ K2 ~~~ K3
-    end
 
     classDef sys fill:#1f3a5f,stroke:#7aa2d8,color:#ffffff
     classDef human fill:#6b4514,stroke:#e0a95a,color:#ffffff
     classDef out fill:#1e4d3a,stroke:#6fcf97,color:#ffffff
     style RUN fill:transparent,stroke:#7f8c9a,stroke-dasharray:4 3
-    style KEY fill:transparent,stroke:#7f8c9a,stroke-dasharray:4 3
 ```
 
 Rounded amber boxes are you, navy boxes are steps (**Claude skill:** marks the ones Claude runs), green is what comes out, and the dotted arrow is the loop back into the next run.
