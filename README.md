@@ -43,6 +43,8 @@ flowchart TB
     style RUN fill:transparent,stroke:#7f8c9a,stroke-dasharray:4 3
 ```
 
+<img src="assets/diagram-key.svg" alt="Key: rounded amber, a person decides or acts; navy, a step a system runs; Claude in bold, a step Claude runs; green, what comes out">
+
 1. **Read state.** The settings, your notes, the last edition, and every tap saved on the page since then. `tally.py` turns the taps into two tables: what the stories were about (tags) and what kind of story they were (angles).
 2. **Research.** One Claude subagent per section searches and reads the pages in parallel, about 25 candidates in all. A fact goes on the page only from a page read in that run; a story known only from a headline or a digest says so.
 3. **Mistral, blind.** Mistral searches the news on its own before it sees Claude's list, so its picks are not anchored on Claude's. Stories only Mistral found are checked against a second source.
@@ -85,9 +87,15 @@ Open Claude Code in `~/news-briefing` and type `/news-briefing`. The first run p
 
 ## How the page learns from your taps
 
-<img src="examples/screenshots/how-it-remembers.jpg" alt="How it remembers: the page on your phone holds the edition and your taps; a run reads them, with Mistral as second editor, and writes the record to state files in the skill folder, which the next run reads again">
+<img src="examples/screenshots/how-it-learns.jpg" alt="Taps become signals per story; tally.py turns the last three stories of each tag into a standing; the standing sets how much room the tag gets in the next edition">
 
-Every tap is saved on the page as one row per story: opened, read, liked, skipped, the seconds the story stayed open, and any question asked in Discuss. At the start of a run, `tally.py` recomputes everything from those rows, so running it twice changes nothing. Each story counts toward its tags and its angle, and only the last three stories of a tag decide its standing: engaged (the latest was read for 30 seconds or more, liked or discussed), cooling (passed over once), skipped (a Skip, or passed over twice), neutral, or new. An edition you never touched teaches nothing: you were away, not uninterested. Because only the last three count, one read lifts a tag again. The Discuss messages are read as requests ("more like this", "less of the polls") for the next run, and the notes you write in `preferences.md` overrule the counts. The selection then gives engaged tags the first claim on borderline slots and shortens the rest, but never drops the day's major stories: the briefing is not allowed to become a bubble.
+Every tap is saved on the page. At the start of each run, `tally.py` rebuilds every standing from scratch:
+
+- **Engaged:** the latest story was read for 30 seconds or more, liked or discussed. Full cards and first claim on borderline slots.
+- **Cooling:** passed over once. Shorter cards.
+- **Skipped:** a Skip, or passed over twice. One-line briefs.
+
+Only the last three stories count, so one read brings a tag back. An edition you never opened counts for nothing. A Discuss message like "less of the polls" is a request for the next run. Your notes in `preferences.md` overrule the counts, and the day's major stories run regardless.
 
 ## Repository layout
 
