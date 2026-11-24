@@ -41,8 +41,8 @@ flowchart TB
         K1(["You decide or act"]):::human
         K2["A step run by Claude, Mistral or a script"]:::sys
         K3["What you get"]:::out
+        K1 ~~~ K2 ~~~ K3
     end
-    T ~~~ KEY
 
     classDef sys fill:#1f3a5f,stroke:#7aa2d8,color:#ffffff
     classDef human fill:#6b4514,stroke:#e0a95a,color:#ffffff
