@@ -1,0 +1,4 @@
+#!/bin/bash
+# The second editor from settings.md. From the project folder: news-briefing-second <prompt file> <turns>
+S="$(cd "$(dirname "$0")/../skills/news-briefing/scripts" && pwd)"
+exec /bin/bash "$S/second.sh" "$@"

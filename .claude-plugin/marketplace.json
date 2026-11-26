@@ -1,0 +1,14 @@
+{
+  "name": "news-briefing-skill",
+  "description": "One plugin: a personal news briefing for Claude Code, published as a private phone page.",
+  "owner": {
+    "name": "Nuno Ferreira"
+  },
+  "plugins": [
+    {
+      "name": "news-briefing",
+      "source": "./",
+      "description": "A personal news briefing as one private phone page, tuned by your taps."
+    }
+  ]
+}

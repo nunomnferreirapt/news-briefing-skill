@@ -28,22 +28,29 @@ Standing, from the last three stories of that tag or angle in editions they used
   new       never shown in an edition they used
 Any later read, like or question lifts a tag again, because only the last three count.
 
-Prints what changed, the Discuss messages, a long-view pick if any, past long views, and
-the stories covered in the last seven days (for the variety rule). Standard library only.
+"Worth reading" and "Career reading" pieces count like stories: under their voice tag
+(reads-mollick ...) and the angle "essay", kept apart from the long view's "analysis".
+
+Prints what changed, the Discuss messages, a long-view pick if any, past long views, the
+stories covered in the last seven days (for the variety rule), the pieces already shown
+(a piece is never shown twice) and any voice passed over five times running.
+Standard library only.
 """
 
 from __future__ import annotations
 
 import datetime as dt
 import json
+import os
 import re
 import sys
 from collections import defaultdict
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-PREFS = HERE / "state" / "preferences.md"
-EDITIONS = HERE / "state" / "editions"
+# The reader's own files: the project's news-briefing/ folder, or NEWS_BRIEFING_DATA when set.
+DATA = Path(os.environ.get("NEWS_BRIEFING_DATA") or Path.cwd() / "news-briefing").resolve()
+PREFS = DATA / "state" / "preferences.md"
+EDITIONS = DATA / "state" / "editions"
 COLS = ["Shown", "Seen", "Opened", "Read", "Liked", "Discussed", "Skipped", "Passed", "Avg s"]
 HEAD = ["Key", *COLS, "Last shown", "Standing"]
 READ_SECONDS = 30
@@ -72,13 +79,20 @@ def load_editions() -> list[dict]:
 
 
 def items(ed: dict):
-    """Every story of an edition, the long view included, as (story_id, tags, angle, headline)."""
+    """Every story of an edition, the long view and the reading pieces included, as (story_id, tags, angle, headline)."""
     for sec in ed.get("sections", []):
         for s in sec.get("stories", []):
             yield s["id"], s.get("tags", []), s.get("angle"), s.get("headline", "")
     lv = ed.get("long_view")
     if lv:
         yield "long-view", lv.get("tags", []), "analysis", lv.get("title", "")
+    for p in pieces(ed):
+        yield p["id"], p.get("tags", []), "essay", p.get("title", "")
+
+
+def pieces(ed: dict) -> list[dict]:
+    """The Worth reading and Career reading pieces of an edition."""
+    return [*(ed.get("reads") or []), *(ed.get("career_reading") or [])]
 
 
 def outcome(row: dict | None, used: bool) -> str:
@@ -199,7 +213,7 @@ def main() -> int:
     changes = []
     intros = {
         "Tags": "What a story is about. Counts since the first edition; \"Seen\" counts only editions the reader used.",
-        "Angles": "What kind of story it is, across topics: policy, decision, deal, money, markets, conflict, research, people, product, analysis.",
+        "Angles": "What kind of story it is, across topics: policy, decision, deal, money, markets, conflict, research, people, product, analysis (the long view), essay (Worth reading).",
     }
     for title in ("Tags", "Angles"):
         order, old = parse_table(text, title)
@@ -252,6 +266,23 @@ def main() -> int:
                     print(f"{ed['edition']} | {s['id']} | {', '.join(s.get('tags', []))} | {s['headline']}")
                 for b in sec.get("briefs", []):
                     print(f"{ed['edition']} | brief | {sec.get('id', '')} | {b.get('text', '')[:140]}")
+
+    print("\n== WORTH READING: PIECES ALREADY SHOWN (never show a URL twice) ==")
+    shown = [(ed["edition"], p) for ed in eds for p in pieces(ed)]
+    for eid, p in shown:
+        print(f"{eid} | {p.get('voice', '')} | {p.get('url', '')} | {p.get('title', '')}")
+    if not shown:
+        print("none")
+    carried = [eid for eid, _ in shown]
+    print("last edition that carried the section: " + (carried[-1] if carried else "none, look back 14 days"))
+
+    print("\n== VOICES PASSED OVER FIVE TIMES RUNNING (tell the reader; never drop one on your own) ==")
+    quiet = []
+    for key, c in stats["Tags"].items():
+        seen = [x for x in c["_hist"] if x != "none"]
+        if key.startswith("reads-") and key != "reads-requested" and len(seen) >= 5 and all(x in ("passed", "skip") for x in seen[-5:]):
+            quiet.append(key)
+    print("\n".join(quiet) or "none")
     return 0
 
 

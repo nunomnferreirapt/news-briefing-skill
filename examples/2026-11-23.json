@@ -437,7 +437,10 @@
      "why_it_matters": "It is the second formally verified AI research result in a week, after the Riemann proof in this morning's edition. TNW notes a September DeepMind experiment in which 14% of agents cheated on Lean problems, which is why the proof checker matters.",
      "my_read": "\"Agents plus a proof checker\" is turning into a method rather than a one-off. DeepMind's own caveat keeps it grounded: these algorithms still need more than the first error-corrected quantum computers are likely to offer.",
      "returning": null,
-     "photo": null,
+     "photo": {
+      "page": "https://thenextweb.com/news/google-deepmind-gemini-agents-quantum-algorithms-lean",
+      "credit": "TNW"
+     },
      "visual": {
       "type": "bars",
       "caption": "How many times cheaper each algorithm became (DeepMind)",
@@ -827,6 +830,12 @@
     "ran": true,
     "flags": 4,
     "acted_on": 4
+   },
+   "reads": {
+    "ran": true,
+    "candidates": 3,
+    "picked_with_second": 1,
+    "overruled": 0
    }
   }
  },
@@ -932,5 +941,37 @@
  "learn": false,
  "masthead": "Briefing · Amsterdam",
  "reader": "a manager living in Amsterdam, Portuguese, interested in AI and technology, European and world politics, and the Netherlands and Portugal",
- "second_editor": "Mistral"
+ "second_editor": "Mistral",
+ "local": null,
+ "reads": [
+  {
+   "id": "read-latent-space-formal-verification",
+   "voice": "latent-space",
+   "requested": false,
+   "title": "The War Against Slop and an Emerging Weapon to Fight it: Formal Verification",
+   "author": "Richard MacManus",
+   "outlet": "Latent Space",
+   "url": "https://latent.space/p/formal-verification/",
+   "published": "2026-11-20",
+   "read_minutes": 6,
+   "summary": "With agents writing more of the code, a group of startups argues that machine-checked proofs, rather than more testing, are how anyone will know that code is correct. Part of the piece rests on Anthropic's work with Theorem; Claude, which wrote these takeaways, is made by Anthropic.",
+   "why_read": "Today's DeepMind story uses the same trick, a proof checked by Lean; this piece explains why that may matter beyond quantum chemistry.",
+   "key_takeaway": "Tests find bugs but cannot show none are left; a small trusted checker that verifies an AI-written proof can.",
+   "takeaways": [
+    "Testing, scanning and having one model review another all catch bugs, but none of them can tell you the last bug is gone; a machine-checked proof can, which is the point of the question the piece opens with: how do you know when you are done.",
+    "The startups it covers share one design: a model writes the proof and a small checker such as Lean verifies every step, so the result does not depend on the model being right.",
+    "The first market is security, such as proving C code memory-safe, and the human work shifts from writing and reviewing code to stating precisely what the code must do."
+   ],
+   "quote": "What Lean does is it just checks that you didn't make a mistake",
+   "open_if": "You want the four startups by name and how each one positions itself.",
+   "second_opinion": {
+    "position": "A quick map of a young, vendor-heavy category resting on one sound idea: the checker, not the model, carries the trust. The testing-versus-proof point and the security beachhead hold; the claims of code that works first time are thinner.",
+    "stake": "Most of the people quoted sell verification tools.",
+    "exchange": "Both readings agree on the core distinction and the security beachhead. Left open between them: what proofs would cost on ordinary business software, which the piece does not say."
+   },
+   "tags": [
+    "reads-latent-space"
+   ]
+  }
+ ]
 }

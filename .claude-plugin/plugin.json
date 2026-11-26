@@ -1,0 +1,9 @@
+{
+  "name": "news-briefing",
+  "description": "A personal news briefing as one private phone page: researched across your sections, checked by an optional second model, essays distilled into takeaways, tuned by your taps, and built every morning if you like.",
+  "author": { "name": "Nuno Ferreira" },
+  "homepage": "https://github.com/nunomnferreirapt/news-briefing-skill",
+  "repository": "https://github.com/nunomnferreirapt/news-briefing-skill",
+  "license": "MIT",
+  "keywords": ["news", "briefing", "artifacts", "skill"]
+}

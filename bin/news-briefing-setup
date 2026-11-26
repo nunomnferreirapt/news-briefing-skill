@@ -1,0 +1,11 @@
+#!/bin/bash
+# Create the reader's news-briefing/ folder in the current folder from the plugin's templates.
+# It never overwrites: an existing news-briefing/ is left as it is.
+set -euo pipefail
+T="$(cd "$(dirname "$0")/../skills/news-briefing/templates" && pwd)"
+if [[ -e news-briefing ]]; then
+  echo "news-briefing/ already exists in $PWD; nothing copied."
+  exit 0
+fi
+cp -R "$T" news-briefing
+echo "Created $PWD/news-briefing from the plugin's templates."

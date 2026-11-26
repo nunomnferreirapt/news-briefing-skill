@@ -3,5 +3,4 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .DS_Store
-skill/news-briefing/out/
-skill/news-briefing/cache/
+/news-briefing/

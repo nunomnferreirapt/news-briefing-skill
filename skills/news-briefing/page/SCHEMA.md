@@ -10,6 +10,8 @@ One JSON file per edition, `state/editions/YYYY-MM-DD.json` (a second edition on
   "masthead": "Briefing · Amsterdam",      // from settings.md: the small line above the title
   "reader": "a reader in Amsterdam who follows ...",   // from settings.md: one line, used by the page's chat
   "second_editor": "Mistral",              // from settings.md: the second model's name, or null when none is set
+  "local": "scene",                        // from settings.md: the local section's id, or null; Career reading sits under it
+  "seeking": null,                         // from settings.md "search": what the reader is looking for in their career, or null; used by the page's chat only
   "covers": "Mon 23 Nov noon to Tue 24 Nov morning",
   "compiled": "2026-11-24T08:10:00+01:00",
   "read_minutes": 6,
@@ -42,6 +44,8 @@ One JSON file per edition, `state/editions/YYYY-MM-DD.json` (a second edition on
     "draws_on": ["Headline of an earlier story (23 Nov)"],
     "tags": ["eu-politics", "long-view"]
   },
+  "reads": [ /* Piece, see below: the "Worth reading" section; 1 to 3, the key left out when nothing qualified */ ],
+  "career_reading": [ /* Piece with for_you, only when settings has a search block: shown as "Career reading" under the local section, or on its own */ ],
   "next_questions": [ { "id": "q1", "question": "...", "why": "one line on why now" } ],   // two or three; the reader may pick one on the page
   "threads": [ { "when": "Wed 25 Nov", "what": "..." } ],
   "deeper": [ "A question the reader could ask in a chat", "..." ],
@@ -50,7 +54,8 @@ One JSON file per edition, `state/editions/YYYY-MM-DD.json` (a second edition on
       "model": "mistral-large-4-0",
       "blind_scan": { "ran": true, "stories": 9, "only_second_kept": ["story-id"], "only_second_dropped": 2 },
       "selection": { "ran": true, "followed": 5, "overruled": 2 },
-      "draft_check": { "ran": true, "flags": 3, "acted_on": 2 }
+      "draft_check": { "ran": true, "flags": 3, "acted_on": 2 },
+      "reads": { "ran": true, "candidates": 5, "picked_with_second": 2, "overruled": 1 }   // only when the edition had Worth reading candidates
     },
     "limits": "Sources that could not be read this run, and anything else the reader should know."
   }
@@ -69,7 +74,9 @@ One JSON file per edition, `state/editions/YYYY-MM-DD.json` (a second edition on
   "summary": "Two or three short sentences a reader can stop after.",
   "what_happened": "Fuller account, from pages read this run.",
   "why_it_matters": "Context and stakes.",
-  "my_read": "Claude's interpretation, labelled as such on the page.",
+  "my_read": "The so what: Claude's position on what this changes, for whom, and what would prove it wrong. Shown under the summary, above the facts, labelled as Claude's read.",
+  "for_you": null,                         // local section stories, only with a search block: the signal for the reader's search, from the sources; shown as "For your search"
+  "watch": false,                          // local section stories: true when the company is on the search block's watch list
   "returning": null,                       // or { "since": "2026-11-23", "what_changed": "One line." } when the topic ran in the last 7 days
   "photo": { "page": "https://source-article-url", "credit": "NOS" },   // build.py takes the page's og:image; null if no real photo
   "visual": null,                          // a chart shown inside the story, see Visuals
@@ -90,9 +97,45 @@ One JSON file per edition, `state/editions/YYYY-MM-DD.json` (a second edition on
 - A `split` only when two named sources state different facts or readings of the same point. Different emphasis is not a split.
 - `basis`: `read` (the page was read this run), `digest` (known only through a digest or newsletter), `headline` (headline or listing only).
 
+
+## Piece (Worth reading and Career reading)
+
+An essay by one of the voices in `sources.md` under "Worth reading", or one the reader asked for by link. Only free pieces whose whole text was read in this run; no podcast episodes, no paid previews. See "Worth reading" in SKILL.md.
+
+```jsonc
+{
+  "id": "read-mollick-jagged-agi",         // "read-" + voice + short slug; unique in the edition
+  "voice": "mollick",                      // the voice id from sources.md, or other (a requested piece by someone else)
+  "requested": false,                      // true when the reader gave the link
+  "title": "On Jagged AGI",
+  "author": "Ethan Mollick",
+  "outlet": "One Useful Thing",
+  "url": "https://...",                    // also the key that keeps a piece from being shown twice
+  "published": "2026-11-09",
+  "read_minutes": 14,                      // of the original: words / 230, rounded up
+  "summary": "The argument in one sentence, shown at the top of the opened piece.",
+  "why_read": "One sentence on why it is worth the reader's attention now; shown on the card.",
+  "key_takeaway": "The one thing to remember, 25 words at most; shown on the card.",
+  "photo": null,                           // optional override { "page": url, "credit": "..." }; by default build.py takes the cover image from the essay's own page
+  "takeaways": ["Two to five, scaled to the piece: 2 under 800 words, 3 up to 2,000, 4 up to 4,000, 5 above."],
+  "quote": "One sentence copied exactly from the piece.",   // build.py checks it against out/reads/<id>.txt
+  "open_if": "The one case where the takeaways are not enough.",
+  "second_opinion": {                      // the second editor's blind read and the one reply; null without a second editor or when the calls failed (say so in making_of.limits)
+    "position": "The second editor's final view of the piece in its own words, 60 words at most",
+    "stake": "What the author has at stake, one line, or null",
+    "exchange": "Two or three sentences: what each conceded and what is left between them"
+  },
+  "for_you": null,                         // career_reading only: shown as "For your search"; written by Claude, never sent to the second editor
+  "tags": ["reads-mollick"]                // reads-<voice>; a requested piece adds "reads-requested"
+}
+```
+
+- The text of each piece is saved as `out/reads/<id>.txt` in the run that read it. `build.py` refuses a quote it cannot find there word for word; when the file is gone (a rebuild in a later session) it says the quote was not checked.
+- Angle is always `essay`; `tally.py` adds it, so these pieces do not move the long view's `analysis` standing.
+
 ## Photos and visuals
 
-- `photo`: on every story where a source page has a real news photo (check it is not a logo). The front page shows it; without one, the tile shows `key` as a large number in the section color.
+- `photo`: on every story, without exception; `build.py` prints `NO IMAGE` and `check_render.js` fails for a story or essay without one. The story's own source page first; otherwise another page read in the run that shows the subject, with `credit` saying what it shows when it is not from today. Not a bare logo, not a generated image.
 - `visual`: a chart inside the opened story, where a number, a comparison or a sequence carries it; null where none helps.
 
 ```jsonc

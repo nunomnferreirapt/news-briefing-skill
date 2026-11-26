@@ -1,0 +1,4 @@
+#!/bin/bash
+# Edition file to page. From the project folder: news-briefing-build news-briefing/state/editions/<id>.json
+S="$(cd "$(dirname "$0")/../skills/news-briefing/scripts" && pwd)"
+exec python3 -I "$S/build.py" "$@"

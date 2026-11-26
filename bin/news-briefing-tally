@@ -1,0 +1,4 @@
+#!/bin/bash
+# Taps to preferences. From the project folder: news-briefing-tally news-briefing/state/taps
+S="$(cd "$(dirname "$0")/../skills/news-briefing/scripts" && pwd)"
+exec python3 -I "$S/tally.py" "$@"
