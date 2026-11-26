@@ -1,13 +1,17 @@
 #!/bin/zsh
-# Install the nightly run as a macOS launchd job for this project folder.
-# Run it from a terminal where `claude`, `node` and `python3` work: it saves that PATH into the job,
-# because launchd starts jobs with almost no PATH.
-# What it does: writes ~/Library/LaunchAgents/<label>.plist and loads it. Nothing else: no sudo,
-# no login item, no shell profile change. Undo with uninstall.sh.
+# Install the nightly run as a macOS launchd job for the project folder it is run from
+# (news-briefing-nightly-install, from the project root, the folder that holds news-briefing/).
+# It saves the current PATH into the job, because launchd starts jobs with almost no PATH.
+# What it does: copies run_nightly.sh into news-briefing/nightly/, writes
+# ~/Library/LaunchAgents/<label>.plist and loads it. Nothing else: no sudo, no login item,
+# no shell profile change. Undo with news-briefing-nightly-uninstall.
 set -eu
-NIGHTLY="${0:A:h}"
-TOOL="${NIGHTLY:h}"
-PROJECT="${TOOL:h}"
+PROJECT="$PWD"
+TOOL="$PROJECT/news-briefing"
+NIGHTLY="$TOOL/nightly"
+[[ -f "$TOOL/settings.md" ]] || { echo "No news-briefing/settings.md here: run this from the project folder, after the first /news-briefing." >&2; exit 1; }
+mkdir -p "$NIGHTLY"
+cp "${0:A:h}/run_nightly.sh" "$NIGHTLY/run_nightly.sh"
 LABEL="local.news-briefing.$(basename "$PROJECT" | tr -c 'A-Za-z0-9\n' '-')"
 PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
 TIME=$(grep -m1 '^nightly:' "$TOOL/settings.md" | awk '{print $2}')
@@ -44,4 +48,4 @@ echo "Installed $LABEL: every day at $(printf '%02d:%02d' $HOUR $MINUTE)."
 echo "Check it:   launchctl print gui/$(id -u)/$LABEL | grep -E 'state|last exit'"
 echo "Run it now: launchctl kickstart gui/$(id -u)/$LABEL"
 echo "Its log:    $TOOL/out/nightly.log"
-echo "Remove it:  zsh $NIGHTLY/uninstall.sh"
+echo "Remove it:  news-briefing-nightly-uninstall (from $PROJECT)"

@@ -1,6 +1,6 @@
 # news-briefing-skill
 
-A Claude Code skill that builds a personal news briefing as one private page for your phone. A topic covered this week stays out unless something real changed, a few essays you choose come back as takeaways, and your taps on the page decide what gets more room next time. Mistral, or any model you can call from the shell, can check what Claude picks and writes. It runs when you ask, or every morning on its own.
+A Claude Code plugin that builds a personal news briefing as one private page for your phone. A topic covered this week stays out unless something real changed, a few essays you choose come back as takeaways, and your taps on the page decide what gets more room next time. Mistral, or any model you can call from the shell, can check what Claude picks and writes. It runs when you ask, or every morning on its own.
 
 ## Preview
 
@@ -65,34 +65,34 @@ I follow four beats: the world, the Netherlands (where I live), Portugal (where 
 
 ## Requirements
 
-- Claude Code with skills, signed in to a claude.ai account that can publish Artifacts. The page uses two Artifact capabilities: saved data (your taps) and Claude chat (the Discuss box under each story).
+- Claude Code with plugins, signed in to a claude.ai account that can publish Artifacts. The page uses two Artifact capabilities: saved data (your taps) and Claude chat (the Discuss box under each story).
 - Python 3.12 or later and Node.js on the PATH (`python3 --version`, `node --version`). The scripts use the standard library only; Node runs the render check before every publish. On macOS, `sips` shrinks the photos; elsewhere they are kept as served.
 - Optional: a second model you can call from the shell. Mistral through its Vibe CLI is the worked example in `settings.md`; Codex, Gemini or a local Ollama model work the same way.
 - Optional, for the nightly run: macOS.
-- [uv](https://docs.astral.sh/uv/), only to run the tests.
 
 ## Install
 
-```bash
-git clone https://github.com/nunomnferreirapt/news-briefing-skill.git
-cd news-briefing-skill
-./install.sh                 # into ~/news-briefing; or ./install.sh ~/some/other/folder
+It is a Claude Code plugin, and this repo is its marketplace. In Claude Code:
+
+```
+/plugin marketplace add nunomnferreirapt/news-briefing-skill
+/plugin install news-briefing@news-briefing-skill
 ```
 
-`install.sh` only copies files: the steps into `~/news-briefing/.claude/skills/news-briefing/`, and the scripts, prompts, page and your settings into `~/news-briefing/news-briefing/`. No sudo, no global packages. It warns if `claude`, `python3` or `node` is missing.
+On Claude Code 2.1.275 or later, one line does both: `/plugin install news-briefing --marketplace nunomnferreirapt/news-briefing-skill`. From a terminal, the same works as `claude plugin install news-briefing --marketplace nunomnferreirapt/news-briefing-skill`.
 
-The page can only be published from files inside the folder Claude Code is working in, so the briefing lives in a project folder of its own.
+The plugin holds the steps, scripts, prompts and page. Your own files live in the folder you run it from, so give the briefing a folder of its own; the page can only be published from files inside the folder Claude Code is working in.
 
 ## Usage
 
 ```bash
-cd ~/news-briefing
+mkdir -p ~/news-briefing && cd ~/news-briefing
 claude
 ```
 
-Then type `/news-briefing`.
+Then type `/news-briefing` (or `/news-briefing:news-briefing` if another skill already uses that name).
 
-- **First run.** It asks a handful of questions: who you are in one line, your beats, your countries, an optional local scene, whether you are job hunting, which essay writers, and an optional second model. Then it writes `settings.md`, trims `sources.md` to your countries, and makes the first edition. It publishes one private page and writes its link into `news-briefing/state/CURRENT.md`.
+- **First run.** It creates `news-briefing/` in that folder from the plugin's templates, then asks a handful of questions: who you are in one line, your beats, your countries, an optional local scene, whether you are job hunting, which essay writers, and an optional second model. Then it writes `settings.md`, trims `sources.md` to your countries, and makes the first edition. It publishes one private page and writes its link into `news-briefing/state/CURRENT.md`.
 - **Every later run** updates the same link. Open it on your phone, tap Read, Like or Skip, ask questions under a story, and pick the next long-view question if you want to. The next run reads all of it.
 - **Settings** stay yours: edit `news-briefing/settings.md` and `news-briefing/sources.md` at any time. To add or drop an essay writer, edit the Worth reading table in `sources.md`.
 
@@ -104,28 +104,21 @@ Then type `/news-briefing`.
 
 ## The nightly run (macOS)
 
-The briefing can build itself every morning, so it is ready when you wake up:
-
-```bash
-cd ~/news-briefing
-zsh news-briefing/nightly/install.sh
-```
-
-Run it from a terminal where `claude` works: it saves that terminal's PATH into the job, because launchd starts jobs with almost no PATH. It writes one file, `~/Library/LaunchAgents/local.news-briefing.<folder>.plist`, and loads it. The time comes from `nightly:` in `settings.md` (06:00 by default). It prints how to check the job and how to run it now.
+The briefing can build itself every morning, so it is ready when you wake up. The first run offers to set it up; later, ask Claude Code in your briefing folder to "install the nightly run". It runs the plugin's `news-briefing-nightly-install`, which copies one small runner into `news-briefing/nightly/`, writes `~/Library/LaunchAgents/local.news-briefing.<folder>.plist` with your current PATH (launchd starts jobs with almost no PATH), and loads it. The time comes from `nightly:` in `settings.md` (06:00 by default). It prints how to check the job and how to run it now.
 
 What to expect:
 - **It builds but does not publish.** A run that launchd starts gets no page tools, so it stops after the render check. The next time you type `/news-briefing`, the night's build is published first and your taps are saved for the next night; `/news-briefing publish` does only that. If you skip a morning, the next night's build replaces it: only the newest is ever published.
-- **It is fenced in.** It reads the open web with nobody watching, so it may write only in `news-briefing/state/` and `news-briefing/out/`, never your settings, the scripts or the page it runs later. It may run the three scripts and the second-model wrapper; everything else is refused without asking. It never commits or pushes.
+- **It is fenced in.** It reads the open web with nobody watching, so on your Mac it may read only your briefing folder and the plugin, and write only in `news-briefing/state/` and `news-briefing/out/`, never your settings or its runner. The scripts it runs are the plugin's own commands, which live outside your folder. Everything else is refused without asking. It never commits or pushes.
 - **It skips** until the first run has done the setup, when today's edition already exists, or when another run is still going.
 - **It leaves a trace.** The full log is `news-briefing/out/nightly.log`. A night that failed or skipped adds one line to `news-briefing/state/nightly-runs.md`, and your next run tells you about it. Taps from the page reach the night run one edition late.
 - **Cost:** a full edition every day, with four research agents, plus the second model's calls if you set one.
 
-Remove it with `zsh news-briefing/nightly/uninstall.sh`.
+To remove it, ask Claude Code to "uninstall the nightly run" (it runs `news-briefing-nightly-uninstall`).
 
 ## Update and uninstall
 
-- **Update:** `git pull` in the clone, then `./install.sh` again. It replaces the steps, scripts, prompts and page, and keeps `settings.md`, `sources.md` and everything in `state/`.
-- **Uninstall:** run `nightly/uninstall.sh` if you installed the nightly run, then delete `~/news-briefing`. The page stays in your claude.ai account until you delete it there.
+- **Update:** `/plugin marketplace update news-briefing-skill`, or switch on auto-update for this marketplace under Marketplaces in `/plugin`. An update replaces the plugin's steps, scripts, prompts and page, and never touches your `news-briefing/` folder. The next `/news-briefing` after an update refreshes the nightly runner if it changed.
+- **Uninstall:** remove the nightly run first if you installed it, then `/plugin uninstall news-briefing@news-briefing-skill`, and delete your briefing folder if you want your settings gone too. The page stays in your claude.ai account until you delete it there.
 
 ## How the page learns from your taps
 
@@ -142,21 +135,15 @@ Only the last three stories count, so one read brings a tag back. An edition you
 ## Repository layout
 
 ```
-install.sh              copies skill/ into your project folder; on an update, keeps your files
-skill/                  what lands in the project folder
-  .claude/skills/news-briefing/
-    SKILL.md            the steps Claude follows
-  news-briefing/
-    settings.md         setup marker, reader, sections, local section, job search, second model, nightly time
-    sources.md          outlets by kind, country, lean and access; the Worth reading writers
-    prompts/            the eight prompts for the second model
-    page/               template.html, the page; SCHEMA.md, the edition format
-    build.py            edition file to page plus photos
-    check_render.js     opens every story and essay in a stand-in browser before publishing
-    tally.py            taps to the Tags and Angles tables, the covered list, the essays already shown
-    second.sh           runs the second model's command from settings.md, in a folder of its own
-    nightly/            run_nightly.sh, install.sh and uninstall.sh for launchd
-    state/              preferences.md and CURRENT.md, empty until the first run
+.claude-plugin/         plugin.json (the plugin) and marketplace.json (this repo as its marketplace)
+skills/news-briefing/
+  SKILL.md              the steps Claude follows
+  scripts/              build.py, tally.py, check_render.js, second.sh, and the nightly runner and installer
+  page/                 template.html, the page; SCHEMA.md, the edition format
+  prompts/              the eight prompts for the second model
+  templates/            what the first run copies into your news-briefing/ folder: settings.md,
+                        sources.md (outlets and the Worth reading writers), and empty state
+bin/                    the commands the skill runs (news-briefing-build and the others), on Claude Code's PATH
 examples/               the 23 Nov 2026 edition and the images in this README
 tests/                  pytest for build and tally, no network
 ```

@@ -3,7 +3,7 @@
 import json
 
 import tally
-from conftest import SKILL
+from conftest import TEMPLATES
 
 
 def test_outcome_needs_a_used_edition():
@@ -31,7 +31,7 @@ def test_standing_from_the_last_three():
 
 def test_run_fills_the_empty_tables(tmp_path, monkeypatch, capsys):
     prefs = tmp_path / "preferences.md"
-    prefs.write_text((SKILL / "state" / "preferences.md").read_text())
+    prefs.write_text((TEMPLATES / "state" / "preferences.md").read_text())
     editions = tmp_path / "editions"
     editions.mkdir()
     editions.joinpath("2026-11-23.json").write_text(json.dumps({"edition": "2026-11-23", "sections": [
@@ -59,7 +59,7 @@ def test_run_fills_the_empty_tables(tmp_path, monkeypatch, capsys):
 
 def test_pieces_count_as_essays_and_are_listed_once_shown(tmp_path, monkeypatch, capsys):
     prefs = tmp_path / "preferences.md"
-    prefs.write_text((SKILL / "state" / "preferences.md").read_text())
+    prefs.write_text((TEMPLATES / "state" / "preferences.md").read_text())
     editions = tmp_path / "editions"
     editions.mkdir()
     editions.joinpath("2026-11-23.json").write_text(json.dumps({"edition": "2026-11-23", "sections": [

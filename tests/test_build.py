@@ -59,7 +59,7 @@ def test_render_check_opens_every_story(offline_build, monkeypatch):
     path, out = offline_build
     monkeypatch.setattr("sys.argv", ["build.py", str(path)])
     build.main()
-    result = subprocess.run(["node", str(build.HERE / "check_render.js"), str(out)], capture_output=True, text=True)
+    result = subprocess.run(["node", str(build.SKILL / "scripts" / "check_render.js"), str(out)], capture_output=True, text=True)
     assert result.returncode == 0, result.stdout
     assert "RESULT: ok" in result.stdout
     assert "sheets opened: 11 of 11" in result.stdout
@@ -67,7 +67,7 @@ def test_render_check_opens_every_story(offline_build, monkeypatch):
 
 
 def test_pieces_need_their_fields_and_a_real_quote(tmp_path, monkeypatch):
-    monkeypatch.setattr(build, "HERE", tmp_path)
+    monkeypatch.setattr(build, "DATA", tmp_path)
     monkeypatch.setattr(build, "READS", tmp_path)
     (tmp_path / "read-x.txt").write_text("The author wrote this sentence, word for word.")
     good = {"id": "read-x", "voice": "x", "title": "t", "author": "a", "url": "u", "summary": "s", "why_read": "w",
@@ -81,7 +81,7 @@ def test_pieces_need_their_fields_and_a_real_quote(tmp_path, monkeypatch):
 
 
 def test_career_reading_needs_for_you(tmp_path, monkeypatch):
-    monkeypatch.setattr(build, "HERE", tmp_path)
+    monkeypatch.setattr(build, "DATA", tmp_path)
     monkeypatch.setattr(build, "READS", tmp_path)
     piece = {"id": "read-c", "voice": "x", "title": "t", "author": "a", "url": "u", "summary": "s", "why_read": "w",
              "key_takeaway": "k", "takeaways": ["one", "two"], "quote": "q", "open_if": "o", "tags": ["reads-x"]}
@@ -97,7 +97,7 @@ def test_render_check_fails_a_story_without_an_image(offline_build, monkeypatch)
     path.write_text(json.dumps(edition))
     monkeypatch.setattr("sys.argv", ["build.py", str(path)])
     build.main()
-    result = subprocess.run(["node", str(build.HERE / "check_render.js"), str(out)], capture_output=True, text=True)
+    result = subprocess.run(["node", str(build.SKILL / "scripts" / "check_render.js"), str(out)], capture_output=True, text=True)
     assert result.returncode == 1
     assert "NO IMAGE on: eu-22nd-sanctions" in result.stdout
 
@@ -115,6 +115,6 @@ def test_local_section_carries_career_reading_after_worth_reading(offline_build,
     path.write_text(json.dumps(edition))
     monkeypatch.setattr("sys.argv", ["build.py", str(path)])
     build.main()
-    result = subprocess.run(["node", str(build.HERE / "check_render.js"), str(out)], capture_output=True, text=True)
+    result = subprocess.run(["node", str(build.SKILL / "scripts" / "check_render.js"), str(out)], capture_output=True, text=True)
     assert result.returncode == 0, result.stdout
     assert "career reading: 1 pieces" in result.stdout

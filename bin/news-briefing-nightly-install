@@ -1,0 +1,4 @@
+#!/bin/bash
+# Install the nightly launchd job for the project folder this is run from.
+S="$(cd "$(dirname "$0")/../skills/news-briefing/scripts" && pwd)"
+exec /bin/zsh "$S/nightly_install.sh" "$@"

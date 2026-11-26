@@ -41,14 +41,16 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import os
 import re
 import sys
 from collections import defaultdict
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-PREFS = HERE / "state" / "preferences.md"
-EDITIONS = HERE / "state" / "editions"
+# The reader's own files: the project's news-briefing/ folder, or NEWS_BRIEFING_DATA when set.
+DATA = Path(os.environ.get("NEWS_BRIEFING_DATA") or Path.cwd() / "news-briefing").resolve()
+PREFS = DATA / "state" / "preferences.md"
+EDITIONS = DATA / "state" / "editions"
 COLS = ["Shown", "Seen", "Opened", "Read", "Liked", "Discussed", "Skipped", "Passed", "Avg s"]
 HEAD = ["Key", *COLS, "Last shown", "Standing"]
 READ_SECONDS = 30

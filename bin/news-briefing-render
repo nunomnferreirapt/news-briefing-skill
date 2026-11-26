@@ -1,0 +1,4 @@
+#!/bin/bash
+# Render check. From the project folder: news-briefing-render news-briefing/site/briefing.html
+S="$(cd "$(dirname "$0")/../skills/news-briefing/scripts" && pwd)"
+exec node "$S/check_render.js" "$@"

@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -28,10 +29,13 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-CACHE = HERE / "cache" / "thumbs"
-SITE = HERE / "site"
-READS = HERE / "out" / "reads"
+SKILL = Path(__file__).resolve().parent.parent  # the plugin's copy: page template, read-only
+# The reader's own files: the project's news-briefing/ folder (run from the project root),
+# or NEWS_BRIEFING_DATA when set.
+DATA = Path(os.environ.get("NEWS_BRIEFING_DATA") or Path.cwd() / "news-briefing").resolve()
+CACHE = DATA / "cache" / "thumbs"
+SITE = DATA / "site"
+READS = DATA / "out" / "reads"
 OUT = SITE / "briefing.html"
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
 MAX_BYTES = 8_000_000
@@ -110,9 +114,9 @@ def check_pieces(edition: dict, seen: set[str]) -> list[str]:
                 problems.append(f"{pid}: for_you belongs to career_reading only")
             text = READS / f"{pid}.txt"
             if not text.exists():
-                print(f"QUOTE: {pid}: not checked (no {text.relative_to(HERE)}; expected in the run that read the piece)")
+                print(f"QUOTE: {pid}: not checked (no {text.relative_to(DATA)}; expected in the run that read the piece)")
             elif p.get("quote") and squash(p["quote"]).strip('"\' ') not in squash(text.read_text()):
-                problems.append(f"{pid}: quote not found word for word in {text.relative_to(HERE)}")
+                problems.append(f"{pid}: quote not found word for word in {text.relative_to(DATA)}")
     return problems
 
 
@@ -175,7 +179,7 @@ def main() -> int:
     if bare:  # no story without an image
         print("NO IMAGE:", ", ".join(bare), "- find a page with a photo for each before publishing")
 
-    template = (HERE / "page" / "template.html").read_text()
+    template = (SKILL / "page" / "template.html").read_text()
     payload = json.dumps(edition, ensure_ascii=False).replace("</", "<\\/")
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(template.replace("__EDITION_JSON__", payload))

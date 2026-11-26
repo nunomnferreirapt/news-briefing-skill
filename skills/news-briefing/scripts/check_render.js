@@ -1,5 +1,5 @@
 // Render check: runs the page script against a minimal fake DOM, lists the story tiles it draws, and opens every sheet.
-// Usage: node check_render.js site/briefing.html   (exit code 1 when something is wrong)
+// Usage: news-briefing-render news-briefing/site/briefing.html   (exit code 1 when something is wrong)
 const fs = require("fs");
 const html = fs.readFileSync(process.argv[2], "utf8");
 const json = html.match(/<script type="application\/json" id="edition">([\s\S]*?)<\/script>/)[1];

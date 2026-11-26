@@ -93,7 +93,7 @@ A paywalled analysis piece counts only as "headline only" unless you list the pu
 
 ## Nightly run (optional)
 
-The time the scheduled run starts, if you install it (see the README). It builds the edition but cannot publish it: the next time you type `/news-briefing` it is published first.
+The time the scheduled run starts, if you install it with `news-briefing-nightly-install` (see the README). It builds the edition but cannot publish it: the next time you type `/news-briefing` it is published first.
 
 ```
 nightly: 06:00
