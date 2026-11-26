@@ -36,6 +36,7 @@ DATA = Path(os.environ.get("NEWS_BRIEFING_DATA") or Path.cwd() / "news-briefing"
 CACHE = DATA / "cache" / "thumbs"
 SITE = DATA / "site"
 READS = DATA / "out" / "reads"
+LV_TEXTS = DATA / "out" / "long-view" / "texts"
 OUT = SITE / "briefing.html"
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
 MAX_BYTES = 8_000_000
@@ -120,6 +121,59 @@ def check_pieces(edition: dict, seen: set[str]) -> list[str]:
     return problems
 
 
+NUM = re.compile(r"\d[\d.,]*%?")
+
+
+def _numbers(text: str) -> set[str]:
+    """Numbers in a text, minus years: a year is context, not a repeated fact."""
+    return {n.rstrip(".,") for n in NUM.findall(text or "") if not re.fullmatch(r"(19|20)\d\d", n.rstrip(".,"))}
+
+
+def _runs(text: str, n: int = 6) -> set[tuple[str, ...]]:
+    words = re.findall(r"[\w'%€$-]+", (text or "").lower())
+    return {tuple(words[i:i + n]) for i in range(len(words) - n + 1)}
+
+
+def repeats(sid: str, s: dict) -> list[str]:
+    """The detail and Background must add to the summary, not restate it, and So what starts where the summary ends.
+    One shared number is allowed as an anchor; two or more, or six words in a row, is a repeat."""
+    out = []
+    summary = s.get("summary", "")
+    for key, label in (("what_happened", "the detail"), ("why_it_matters", "background")):
+        text = s.get(key) or ""
+        if not text:
+            continue
+        shared = sorted(_numbers(summary) & _numbers(text))
+        if len(shared) >= 2:
+            out.append(f"{sid}: {label} ({key}) repeats the summary's numbers {', '.join(shared)}; keep only what the summary does not say")
+        run = next(iter(_runs(summary) & _runs(text)), None)
+        if run:
+            out.append(f"{sid}: {label} ({key}) copies the summary's words \"{' '.join(run)}\"")
+    run = next(iter(_runs(summary) & _runs(s.get("my_read") or "")), None)
+    if run:
+        out.append(f"{sid}: So what (my_read) copies the summary's words \"{' '.join(run)}\"; start where the summary ends")
+    return out
+
+
+def check_voices(edition: dict) -> list[str]:
+    """The long view's Voices: 2 to 4 quotes, each word for word in the text the run saved."""
+    problems = []
+    voices = (edition.get("long_view") or {}).get("voices") or []
+    if voices and not 2 <= len(voices) <= 4:
+        problems.append(f"long view: {len(voices)} voices, 2 to 4 or none")
+    for v in voices:
+        vid = v.get("id", "?")
+        for field in ("id", "who", "outlet", "url", "quote", "stake"):
+            if not v.get(field):
+                problems.append(f"voice {vid}: missing {field}")
+        text = LV_TEXTS / f"{vid}.txt"
+        if not text.exists():
+            print(f"QUOTE: voice {vid}: not checked (no {text.relative_to(DATA)}; expected in the run that read the piece)")
+        elif v.get("quote") and squash(v["quote"]).strip('"\' ') not in squash(text.read_text()):
+            problems.append(f"voice {vid}: quote not found word for word in {text.relative_to(DATA)}")
+    return problems
+
+
 def check(edition: dict) -> list[str]:
     """Light checks against page/SCHEMA.md; returns problems, never raises."""
     problems = []
@@ -136,10 +190,19 @@ def check(edition: dict) -> list[str]:
             for key in ("headline", "summary", "sources", "tags"):
                 if not s.get(key):
                     problems.append(f"{sid}: missing {key}")
-            split = (s.get("coverage") or {}).get("split")
-            if split and not (split.get("a") and split.get("b")):
-                problems.append(f"{sid}: split needs a and b")
+            cov = s.get("coverage") or {}
+            splits = cov.get("splits") or ([cov["split"]] if cov.get("split") else [])
+            if len(splits) > 3:
+                problems.append(f"{sid}: at most three splits")
+            for sp in splits:
+                if not (sp.get("topic") and sp.get("a") and sp.get("b")):
+                    problems.append(f"{sid}: a split needs topic, a and b")
+            framing = cov.get("framing") or []
+            if framing and (len(framing) < 2 or not all(fr.get("source") and fr.get("leads_with") for fr in framing)):
+                problems.append(f"{sid}: framing needs two or more outlets, each with source and leads_with")
+            problems += repeats(sid, s)
     problems += check_pieces(edition, seen)
+    problems += check_voices(edition)
     return problems
 
 

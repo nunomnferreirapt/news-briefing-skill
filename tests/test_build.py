@@ -27,7 +27,51 @@ def test_check_wants_both_sides_of_a_split():
     edition = {"edition": "x", "title": "t", "lead": [], "sections": [{"id": "a", "stories": [
         {"id": "s", "headline": "h", "summary": "s", "sources": [1], "tags": ["t"],
          "coverage": {"split": {"a": {"source": "A", "says": "1"}}}}]}]}
-    assert "s: split needs a and b" in build.check(edition)
+    assert "s: a split needs topic, a and b" in build.check(edition)
+
+
+def _story(**kw):
+    s = {"id": "s", "headline": "h", "summary": "The EU faces 15% from 1 March under a deal signed in Brussels on Tuesday.", "sources": [1], "tags": ["t"]}
+    s.update(kw)
+    return {"edition": "x", "title": "t", "lead": [], "sections": [{"id": "a", "stories": [s]}]}
+
+
+def test_check_flags_a_detail_that_repeats_the_summary():
+    problems = build.check(_story(what_happened="From 1 March the EU faces 15%; China gets 20%."))
+    assert any("repeats the summary's numbers 1, 15%" in p for p in problems)
+    problems = build.check(_story(why_it_matters="It was a deal signed in Brussels on Tuesday after long talks."))
+    assert any("copies the summary's words" in p for p in problems)
+
+
+def test_check_allows_one_shared_number_and_a_fresh_read():
+    assert build.check(_story(what_happened="China gets 20% and the EU's 15% can rise to 20%.",
+                              my_read="Exporters should plan on the higher rate.")) == []
+
+
+def test_check_flags_a_read_that_copies_the_summary():
+    problems = build.check(_story(my_read="Under a deal signed in Brussels on Tuesday, nothing changes."))
+    assert any("So what (my_read) copies" in p for p in problems)
+
+
+def test_check_splits_and_framing():
+    sp = {"topic": "t", "a": {"source": "A", "says": "1"}, "b": {"source": "B", "says": "2"}}
+    assert build.check(_story(coverage={"splits": [sp] * 4})) == ["s: at most three splits"]
+    assert build.check(_story(coverage={"framing": [{"source": "A", "leads_with": "x"}]})) == [
+        "s: framing needs two or more outlets, each with source and leads_with"]
+    assert build.check(_story(coverage={"splits": [sp], "framing": [{"source": "A", "leads_with": "x"}, {"source": "B", "leads_with": "y"}]})) == []
+
+
+def test_check_voices_quotes_word_for_word(tmp_path, monkeypatch):
+    monkeypatch.setattr(build, "LV_TEXTS", tmp_path)
+    monkeypatch.setattr(build, "DATA", tmp_path)
+    (tmp_path / "v1.txt").write_text("Seats aren\u2019t going away; they\u2019re getting a meter.")
+    (tmp_path / "v2.txt").write_text("Something else entirely.")
+    voice = lambda vid, q: {"id": vid, "who": "W", "outlet": "O", "url": "u", "quote": q, "stake": "sells x"}
+    edition = _story()
+    edition["long_view"] = {"voices": [voice("v1", "Seats aren't going away; they're getting a meter."), voice("v2", "not in the text")]}
+    assert build.check(edition) == ["voice v2: quote not found word for word in v2.txt"]
+    edition["long_view"] = {"voices": [voice("v1", "x")]}
+    assert "long view: 1 voices, 2 to 4 or none" in build.check(edition)
 
 
 @pytest.fixture
