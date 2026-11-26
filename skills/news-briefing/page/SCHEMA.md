@@ -40,6 +40,7 @@ One JSON file per edition, `state/editions/YYYY-MM-DD.json` (a second edition on
     "agree": ["Where Claude and the second editor agree, one line each"],
     "second": { "position": "The second editor's final position in its own words, 60 words at most", "exchange": "two or three sentences: what each conceded and what is left between them", "settle": "what would settle the difference" },
     "earlier_call": null,                  // or "On 23 Nov this column said ... It held / did not hold."
+    "voices": [ { "id": "bain-pricing", "who": "Author name", "outlet": "Bain", "url": "https://...", "quote": "word for word from out/long-view/texts/<id>.txt", "stake": "what the speaker sells or stands to gain, one line" } ],   // 2 to 4, or left out; shown as "Voices from the reading" after the argument
     "reading": [ { "title": "...", "author": "...", "outlet": "Bruegel", "url": "https://...", "note": "what it argues, one line" } ],
     "draws_on": ["Headline of an earlier story (23 Nov)"],
     "tags": ["eu-politics", "long-view"]
@@ -72,8 +73,8 @@ One JSON file per edition, `state/editions/YYYY-MM-DD.json` (a second edition on
   "headline": "COP31 ends with no final text",
   "key": { "value": "190+", "label": "countries, no agreement" },   // the one fact in large type; null if none fits
   "summary": "Two or three short sentences a reader can stop after.",
-  "what_happened": "Fuller account, from pages read this run.",
-  "why_it_matters": "Context and stakes.",
+  "what_happened": "Shown as 'The detail': only facts the summary does not give (other actors, figures, dates, next steps), from pages read this run. No number or phrase from the summary again. Empty when there is nothing to add.",
+  "why_it_matters": "Shown as 'Background and reactions': what led here and named reactions, sourced. No judgement on importance; the stakes live in my_read only. Empty when there is nothing to add.",
   "my_read": "The so what: Claude's position on what this changes, for whom, and what would prove it wrong. Shown under the summary, above the facts, labelled as Claude's read.",
   "for_you": null,                         // local section stories, only with a search block: the signal for the reader's search, from the sources; shown as "For your search"
   "watch": false,                          // local section stories: true when the company is on the search block's watch list
@@ -83,10 +84,12 @@ One JSON file per edition, `state/editions/YYYY-MM-DD.json` (a second edition on
   "coverage": {
     "kinds": ["public broadcaster", "wire agency"],
     "countries": ["NL", "UK", "TR"],
-    "split": null,                         // or { "topic": "casualties", "a": { "source": "Reuters via Defense News", "says": "ten injured" }, "b": { "source": "Al Jazeera", "says": "one dead" } }
+    "splits": [],                          // 0 to 3: [{ "topic": "casualties", "a": { "source": "Reuters via Defense News", "says": "ten injured" }, "b": { "source": "Al Jazeera", "says": "one dead" } }]. Older editions carry one "split"; the page reads both.
+    "framing": [],                         // 0, or 2 to 4 outlets that agree on the facts but lead with different angles: [{ "source": "Euronews", "leads_with": "the EU hit by new US tariffs" }]
     "blind_spot": null                     // or one line: who is not covering it, e.g. "Only Dutch outlets so far"
   },
-  "second_differs": null,                  // or { "note": "<= 25 words", "would_change_mind": "the evidence that would settle it" }
+  "second_differs": null,                  // or { "note": "<= 25 words", "would_change_mind": "the evidence that would settle it" }: the second editor's read, shown right under Claude's So what
+  "second_agrees": false,                  // true when the second editor's draft check answered READ AGREE for this story; shown as one line under the So what
   "sources": [
     { "name": "NOS", "url": "https://...", "kind": "public broadcaster", "country": "NL", "basis": "read" }
   ]
@@ -94,7 +97,9 @@ One JSON file per edition, `state/editions/YYYY-MM-DD.json` (a second edition on
 ```
 
 - `coverage.kinds` and `countries` come from the sources actually used, looked up in `sources.md`. The page counts them.
-- A `split` only when two named sources state different facts or readings of the same point. Different emphasis is not a split.
+- The page has two kinds of difference, kept apart. The AIs: `my_read` and `second_differs` sit together under the summary. The sources: "How the sources differ" after the facts, with the coverage chips, the `splits`, the `framing` and the `blind_spot`.
+- A split only when two named sources state different facts or readings of the same point. Different emphasis is not a split: that is `framing`, one line per outlet on what it leads with, only when the angles really differ.
+- `build.py` prints a SCHEMA line when `what_happened` or `why_it_matters` shares two or more numbers (years aside) or six words in a row with the summary, or when `my_read` copies six words in a row from it.
 - `basis`: `read` (the page was read this run), `digest` (known only through a digest or newsletter), `headline` (headline or listing only).
 
 
