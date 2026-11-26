@@ -5,3 +5,4 @@ __pycache__/
 .DS_Store
 skill/news-briefing/out/
 skill/news-briefing/cache/
+skill/news-briefing/site/

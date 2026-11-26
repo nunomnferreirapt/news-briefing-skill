@@ -1,5 +1,5 @@
 // Render check: runs the page script against a minimal fake DOM, lists the story tiles it draws, and opens every sheet.
-// Usage: node check_render.js out/site/briefing.html   (exit code 1 when something is wrong)
+// Usage: node check_render.js site/briefing.html   (exit code 1 when something is wrong)
 const fs = require("fs");
 const html = fs.readFileSync(process.argv[2], "utf8");
 const json = html.match(/<script type="application\/json" id="edition">([\s\S]*?)<\/script>/)[1];
@@ -43,9 +43,10 @@ const checks = `
     }
   })(app);
   console.log("front page parts:", app.children.length, "| plain-text parts at top level:", app.children.filter(c => typeof c === "string").length);
-  console.log("tiles drawn:", tiles.length, "of", ALL.length + (LV ? 1 : 0), "expected");
+  const expected = ALL.length + (LV ? 1 : 0) + READS.length + CAREER.length;
+  console.log("tiles drawn:", tiles.length, "of", expected, "expected");
   tiles.forEach(t => console.log("  -", t));
-  let problems = stray.length + (tiles.length === ALL.length + (LV ? 1 : 0) ? 0 : 1);
+  let problems = stray.length + (tiles.length === expected ? 0 : 1);
   if (stray.length) console.log("STRAY TEXT on front page:", stray);
   let opened = 0;
   for (const id of Object.keys(byId)) {
@@ -58,6 +59,23 @@ const checks = `
     } catch (err) { problems++; console.log("  SHEET ERROR", id, err.message); }
   }
   console.log("sheets opened:", opened, "of", Object.keys(byId).length);
+  console.log("worth reading:", READS.length ? READS.length + " pieces (" + READS.map(p => p.voice + ", " + (p.takeaways || []).length + " takeaways" + (p.second_opinion ? "" : ", no second opinion")).join("; ") + ")" : "absent",
+    "| career reading:", CAREER.length ? CAREER.length + " pieces" : "absent");
+  for (const p of [...READS, ...CAREER]) {
+    openSheet(p.id);
+    const t = sheet.textContent;
+    const missing = [...(p.takeaways || []), p.quote, p.open_if, p.kind === "career_read" ? p.for_you : null].filter(x => x && !t.includes(x));
+    const card = (function find(n) { for (const c of n.children) { if (c && typeof c !== "string") { if ((c.attrs && c.attrs.id === "t-" + p.id) || c.id === "t-" + p.id) return c; const f = find(c); if (f) return f; } } return null; })(app);
+    const cardMissing = [p.why_read, p.key_takeaway].filter(x => x && !(card && card.textContent.includes(x)));
+    if (cardMissing.length) { problems++; console.log("  CARD PROBLEM", p.id, "not on its card:", cardMissing.map(x => x.slice(0, 40))); }
+    if (missing.length) { problems++; console.log("  PIECE PROBLEM", p.id, "not on its sheet:", missing.map(x => x.slice(0, 40))); }
+    closeSheet(true);
+  }
+  const noImg = [...ALL.map(x => x.s), ...READS, ...CAREER].filter(s => !s.photo?.src).map(s => s.id);
+  if (noImg.length) { problems++; console.log("  NO IMAGE on:", noImg.join(", ")); }
+  const order = app.children.filter(c => c && c.tag === "section").map(c => c.attrs["aria-label"]);
+  const localName = (E.sections.find(sec => sec.id === E.local) || {}).name;
+  if (READS.length && localName && order.includes(localName) && order.indexOf("Worth reading") > order.indexOf(localName)) { problems++; console.log("  ORDER PROBLEM: Worth reading must come before " + localName); }
   console.log("long view:", LV ? "present, " + LV.body.length + " paragraphs, " + (E.next_questions || []).length + " next questions" : "absent");
   const extras = E.sections.map(s => s.id + ": " + (s.events || []).length + " events, " + (s.rankings || []).length + " rankings").filter(x => !x.includes(": 0 events, 0 rankings"));
   if (extras.length) console.log("section extras:", extras.join("; "));

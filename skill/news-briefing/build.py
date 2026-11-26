@@ -1,13 +1,18 @@
 """Build the briefing page from one edition file.
 
 Usage: python3 -I build.py state/editions/2026-11-24.json
-Writes out/site/briefing.html and out/site/thumbs/, plus out/site/files.json: the
-`files` map to pass to the Artifact publish. Thumbnails: for every story whose
+Writes site/briefing.html and site/thumbs/, plus site/files.json: the `files` map to
+pass to the Artifact publish, its sources relative to this folder (publish with
+`root` set to this folder). The nightly run builds site/ and stops; the next run at the
+keyboard publishes it. Thumbnails: for every story whose
 photo is {"page": <url>, "credit": ...}, take the page's og:image, shrink it to
 640 px wide (with macOS sips when present; elsewhere the
 original image is kept), and publish it as a file beside the page (artifact
 pages cannot load images from other sites). A failed fetch drops the thumbnail and
-is reported; it never stops the build. Standard library only.
+is reported; it never stops the build. For each "Worth reading" or "Career reading"
+piece it looks for the quote, word for word, in out/reads/<id>.txt (the text saved by
+the run that read the piece) and prints a SCHEMA line when it is not there.
+Standard library only.
 """
 
 from __future__ import annotations
@@ -25,7 +30,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 CACHE = HERE / "cache" / "thumbs"
-SITE = HERE / "out" / "site"
+SITE = HERE / "site"
+READS = HERE / "out" / "reads"
 OUT = SITE / "briefing.html"
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
 MAX_BYTES = 8_000_000
@@ -71,6 +77,45 @@ def thumb_file(page_url: str) -> Path:
     return cached
 
 
+def squash(text: str) -> str:
+    """Lower-case, straight quotes, single spaces: so a quote matches whatever the page's typography."""
+    for a, b in (("\u2018", "'"), ("\u2019", "'"), ("\u201c", '"'), ("\u201d", '"'), ("\u2013", "-"), ("\u2014", "-"), ("\u00a0", " ")):
+        text = text.replace(a, b)
+    return " ".join(text.lower().split())
+
+
+def check_pieces(edition: dict, seen: set[str]) -> list[str]:
+    """Checks on the Worth reading and Career reading pieces."""
+    problems = []
+    for key in ("reads", "career_reading"):
+        pieces = edition.get(key) or []
+        if key == "reads" and len(pieces) > 3:
+            problems.append(f"reads: {len(pieces)} pieces, at most 3")
+        voices = [p.get("voice") for p in pieces if not p.get("requested")]
+        for v in {v for v in voices if v and v != "other" and voices.count(v) > 1}:
+            problems.append(f"{key}: more than one piece by {v}")
+        for p in pieces:
+            pid = p.get("id", "?")
+            if pid in seen:
+                problems.append(f"duplicate id {pid}")
+            seen.add(pid)
+            for field in ("title", "author", "url", "summary", "why_read", "key_takeaway", "takeaways", "quote", "open_if", "tags"):
+                if not p.get(field):
+                    problems.append(f"{pid}: missing {field}")
+            if not 2 <= len(p.get("takeaways") or []) <= 5:
+                problems.append(f"{pid}: needs 2 to 5 takeaways")
+            if key == "career_reading" and not p.get("for_you"):
+                problems.append(f"{pid}: a career piece needs for_you")
+            if key == "reads" and p.get("for_you"):
+                problems.append(f"{pid}: for_you belongs to career_reading only")
+            text = READS / f"{pid}.txt"
+            if not text.exists():
+                print(f"QUOTE: {pid}: not checked (no {text.relative_to(HERE)}; expected in the run that read the piece)")
+            elif p.get("quote") and squash(p["quote"]).strip('"\' ') not in squash(text.read_text()):
+                problems.append(f"{pid}: quote not found word for word in {text.relative_to(HERE)}")
+    return problems
+
+
 def check(edition: dict) -> list[str]:
     """Light checks against page/SCHEMA.md; returns problems, never raises."""
     problems = []
@@ -90,6 +135,7 @@ def check(edition: dict) -> list[str]:
             split = (s.get("coverage") or {}).get("split")
             if split and not (split.get("a") and split.get("b")):
                 problems.append(f"{sid}: split needs a and b")
+    problems += check_pieces(edition, seen)
     return problems
 
 
@@ -108,19 +154,26 @@ def main() -> int:
     if (SITE / "thumbs").exists():
         shutil.rmtree(SITE / "thumbs")
     (SITE / "thumbs").mkdir(parents=True)
-    for sec in edition.get("sections", []):
-        for s in sec.get("stories", []):
-            ph = s.get("photo") or {}
-            if ph.get("page"):
-                try:
-                    rel = f"thumbs/{edition['edition']}__{s['id']}.jpg"
-                    shutil.copyfile(thumb_file(ph["page"]), SITE / rel)
-                    ph["src"] = rel
-                    files[rel] = str(SITE / rel)
-                    thumbs += 1
-                except Exception as e:  # report and carry on without the image
-                    print(f"PHOTO: {s.get('id')}: dropped ({e})")
-                    s["photo"] = None
+    items = [s for sec in edition.get("sections", []) for s in sec.get("stories", [])]
+    pieces = (edition.get("reads") or []) + (edition.get("career_reading") or [])
+    for p in pieces:  # an essay's cover comes from its own page unless the edition names another
+        if not p.get("photo") and p.get("url"):
+            p["photo"] = {"page": p["url"], "credit": p.get("outlet")}
+    for s in items + pieces:
+        ph = s.get("photo") or {}
+        if ph.get("page"):
+            try:
+                rel = f"thumbs/{edition['edition']}__{s['id']}.jpg"
+                shutil.copyfile(thumb_file(ph["page"]), SITE / rel)
+                ph["src"] = rel
+                files[rel] = f"site/{rel}"
+                thumbs += 1
+            except Exception as e:  # report and carry on without the image
+                print(f"PHOTO: {s.get('id')}: dropped ({e})")
+                s["photo"] = None
+    bare = [s["id"] for s in items + pieces if not (s.get("photo") or {}).get("src")]
+    if bare:  # no story without an image
+        print("NO IMAGE:", ", ".join(bare), "- find a page with a photo for each before publishing")
 
     template = (HERE / "page" / "template.html").read_text()
     payload = json.dumps(edition, ensure_ascii=False).replace("</", "<\\/")

@@ -22,6 +22,7 @@ The table the briefing uses to label coverage: what kind of outlet each source i
 | De Telegraaf | newspaper | NL | right | nl | paywall | |
 | RTL Nieuws | newspaper | NL | | nl | open | commercial broadcaster's site |
 | DutchNews.nl | newspaper | NL | | en | open | English summaries of Dutch news |
+| NL Times | newspaper | NL | | en | open | English; carries ANP |
 
 ## Portugal
 
@@ -61,6 +62,9 @@ The table the briefing uses to label coverage: what kind of outlet each source i
 | The National | newspaper | AE | | en | open | |
 | Defense News | newspaper | US | | en | open | carries Reuters on defence |
 | 10 Things | digest | | | en | open | daily world digest |
+| France 24 | public broadcaster | FR | | en | open | carries AFP |
+| CNBC | business press | US | | en | open | markets |
+| CBS News | public broadcaster | US | | en | open | US politics |
 
 ## Tech & AI
 
@@ -121,3 +125,15 @@ For the long view. A piece counts only if the whole argument could be read witho
 | Financial Times, Foreign Affairs | business press | | | en | paywall | headline only |
 
 When the briefing covers Anthropic, Claude says on the page that it is made by Anthropic.
+
+## Worth reading
+
+The voices behind the "Worth reading" section (and the "Career reading" block, when settings has a search block). Essays only, free and readable whole; the Notes say what counts and where to read it. These five are an example: the first run asks whether to keep them, and you add or remove rows yourself. The skill never adds or drops a voice on its own. `id` is what the edition calls the voice (`reads-<id>` as a tag).
+
+| id | Source | Kind | Country | Language | Access | Notes |
+|---|---|---|---|---|---|---|
+| karpathy | Andrej Karpathy | newspaper | US | en | open | personal blog; feed https://karpathy.bearblog.dev/feed/ carries the full text; every post counts; rare |
+| mollick | One Useful Thing (Ethan Mollick) | newspaper | US | en | open | feed https://www.oneusefulthing.org/feed carries the full text; every free post counts; about one every three weeks |
+| latent-space | Latent Space | tech press | US | en | partly open | feed https://www.latent.space/feed; only essays that argue something of their own. Never the daily news issues, podcast episodes, announcement write-ups or event recaps |
+| lenny | Lenny's Newsletter | newspaper | US | en | paywall | feed https://www.lennysnewsletter.com/feed; free essays only. Never podcast episodes, community digests, promotions or paid posts; career essays go to "Career reading" |
+| poyar | Growth Unhinged (Kyle Poyar) | newspaper | US | en | partly open | no working feed: read https://www.growthunhinged.com/archive; free essays and reports, about one a week; go-to-market |

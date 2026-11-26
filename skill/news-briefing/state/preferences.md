@@ -15,7 +15,7 @@ What a story is about. Counts since the first edition; "Seen" counts only editio
 
 ## Angles
 
-What kind of story it is, across topics: policy, decision, deal, money, markets, conflict, research, people, product, analysis.
+What kind of story it is, across topics: policy, decision, deal, money, markets, conflict, research, people, product, analysis (the long view), essay (Worth reading).
 
 | Key | Shown | Seen | Opened | Read | Liked | Discussed | Skipped | Passed | Avg s | Last shown | Standing |
 |---|---|---|---|---|---|---|---|---|---|---|---|

@@ -5,16 +5,16 @@
 /* Layout: a front page. Sections take hues s1 to s4 in the order the edition lists them. One lead story with a full-width photo, two second stories side by side, then one swipeable row of picture-or-number tiles per section. Any story opens as a full-screen sheet with the detail, the buttons and the chat. */
 :root{
   --bg:#f3f4f7; --surface:#ffffff; --fg:#151c27; --muted:#5b6676; --line:#dce1e8; --chip:#e9ecf2; --inset:#eef0f6;
-  --s1:#3848b8; --s2:#9a2f78; --s3:#0b7466; --s4:#5a7410; --split:#a65a08; --second:#c2410c; --on-accent:#ffffff; --scrim:rgba(10,14,20,.55);
+  --s1:#3848b8; --s2:#9a2f78; --s3:#0b7466; --s4:#5a7410; --reads:#a3352b; --split:#a65a08; --second:#c2410c; --on-accent:#ffffff; --scrim:rgba(10,14,20,.55);
   --display:"Space Grotesk","Segoe UI",system-ui,sans-serif;
   --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
   --bg:#0f141b; --surface:#18202a; --fg:#e8ecf2; --muted:#9ba7b6; --line:#2b3644; --chip:#232d3a; --inset:#1e2733;
-  --s1:#93a0ff; --s2:#ea8bcb; --s3:#55cdb9; --s4:#b9d45c; --split:#eeaa55; --second:#fb923c; --on-accent:#0f141b; --scrim:rgba(0,0,0,.6); color-scheme:dark } }
+  --s1:#93a0ff; --s2:#ea8bcb; --s3:#55cdb9; --s4:#b9d45c; --reads:#f2948a; --split:#eeaa55; --second:#fb923c; --on-accent:#0f141b; --scrim:rgba(0,0,0,.6); color-scheme:dark } }
 :root[data-theme="dark"]{
   --bg:#0f141b; --surface:#18202a; --fg:#e8ecf2; --muted:#9ba7b6; --line:#2b3644; --chip:#232d3a; --inset:#1e2733;
-  --s1:#93a0ff; --s2:#ea8bcb; --s3:#55cdb9; --s4:#b9d45c; --split:#eeaa55; --second:#fb923c; --on-accent:#0f141b; --scrim:rgba(0,0,0,.6); color-scheme:dark }
+  --s1:#93a0ff; --s2:#ea8bcb; --s3:#55cdb9; --s4:#b9d45c; --reads:#f2948a; --split:#eeaa55; --second:#fb923c; --on-accent:#0f141b; --scrim:rgba(0,0,0,.6); color-scheme:dark }
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;
   padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:16px 56px}
@@ -25,7 +25,7 @@ p{margin:0}
 a{color:inherit;text-underline-offset:2px;text-decoration-color:var(--muted)}
 button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--s1);outline-offset:2px}
-.s1{--c:var(--s1)} .s2{--c:var(--s2)} .s3{--c:var(--s3)} .s4{--c:var(--s4)} .lv{--c:var(--fg)}
+.s1{--c:var(--s1)} .s2{--c:var(--s2)} .s3{--c:var(--s3)} .s4{--c:var(--s4)} .reads{--c:var(--reads)} .lv{--c:var(--fg)}
 .kicker{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;color:var(--muted)}
 .meta{color:var(--muted);font-size:.88rem}
 
@@ -49,7 +49,7 @@ button{font:inherit;color:inherit}
 .tap .sk{color:var(--c)}
 .flags{display:flex;flex-wrap:wrap;gap:5px}
 .flag{font-size:.68rem;font-weight:600;border-radius:999px;padding:1px 7px;box-shadow:inset 0 0 0 1px currentColor}
-.flag.split{color:var(--split)} .flag.second{color:var(--second)} .flag.back{color:var(--c)} .flag.done{color:var(--muted)}
+.flag.split{color:var(--split)} .flag.second{color:var(--second)} .flag.back{color:var(--c)} .flag.done{color:var(--muted)} .flag.watch{color:var(--on-accent);background:var(--c);box-shadow:none}
 
 .lead .vis{aspect-ratio:16/10}
 .lead .num b{font-size:3.4rem}
@@ -111,6 +111,8 @@ td:first-child{white-space:nowrap;font-weight:500}
 .chip.split{color:var(--split);box-shadow:inset 0 0 0 1px var(--split);background:transparent}
 .chip.blind{color:var(--muted);box-shadow:inset 0 0 0 1px var(--line);background:transparent}
 .chip.second{color:var(--second);box-shadow:inset 0 0 0 1px var(--second);background:transparent}
+.chip.watch{color:var(--on-accent);background:var(--c)}
+.foryou{border:1px solid var(--c);border-radius:12px;padding:11px 13px}
 .extras{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
 .extras ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
 .extras li{display:grid;grid-template-columns:4.6rem 1fr;gap:10px;font-size:.92rem;line-height:1.35}
@@ -152,6 +154,25 @@ svg text{font-family:var(--body);fill:var(--fg)}
 .chat textarea{flex:1;min-width:0;font:inherit;font-size:16px;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--surface);color:var(--fg);resize:vertical;min-height:44px}
 .chat .send{border:0;border-radius:8px;padding:10px 14px;background:var(--c);color:var(--on-accent);font-weight:600;cursor:pointer}
 .chat .send:disabled{opacity:.5}
+.pieces{display:flex;flex-direction:column;gap:10px}
+/* essay card: not a news tile. A wide cover with the author on it, then why to read it and the one takeaway. */
+.row.essays .tap{flex:0 0 86%;max-width:360px}
+.piece{background:color-mix(in srgb, var(--c) 7%, var(--surface));border-color:color-mix(in srgb, var(--c) 35%, var(--line))}
+.piece .cover{position:relative;aspect-ratio:16/9;overflow:hidden;background:color-mix(in srgb, var(--c) 22%, var(--surface));display:flex;align-items:flex-end}
+.piece .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.piece .cover::after{content:"";position:absolute;inset:0;background:linear-gradient(to top, rgba(10,14,20,.78), rgba(10,14,20,.05) 60%)}
+.piece .cover .by{position:relative;z-index:1;padding:10px 13px;color:#fff;display:flex;flex-direction:column;gap:1px}
+.piece .cover .by b{font-family:var(--display);font-size:1.02rem;font-weight:700}
+.piece .cover .by span{font-size:.74rem;opacity:.9}
+.piece .cover .mins{position:absolute;z-index:1;top:9px;right:9px;font-size:.7rem;font-weight:600;background:var(--c);color:var(--on-accent);padding:2px 8px;border-radius:999px}
+.piece h3{font-family:var(--display);font-size:1.08rem;font-weight:700}
+.piece .why,.piece .take{font-size:.93rem;line-height:1.42}
+.piece .take{border-left:3px solid var(--c);padding-left:10px}
+.piece .lbl{margin-bottom:1px}
+.takes{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:10px;font-size:1rem;line-height:1.5}
+.takes li::marker{color:var(--c);font-weight:600}
+.quote{margin:0;border-left:3px solid var(--c);padding:2px 0 2px 12px;font-size:1rem;font-style:italic}
+.quote small{display:block;font-style:normal;color:var(--muted);font-size:.8rem;margin-top:3px}
 .lvcard{border-width:2px;border-color:var(--fg)}
 .lvcard h2{font-size:1.35rem;font-weight:700}
 .lvcard .sum{font-size:.98rem}
@@ -180,13 +201,22 @@ for (const sec of E.sections) for (const s of sec.stories) ALL.push({ s, sec });
 const byId = Object.fromEntries(ALL.map(x => [x.s.id, x]));
 // Section hues follow the order of the sections, so any four sections get the four colors.
 const HUE = Object.fromEntries(E.sections.map((sec, i) => [sec.id, "s" + (i % 4 + 1)]));
-HUE.lv = "lv";
+HUE.lv = "lv"; HUE.reads = "reads";
+// The local section (settings.md), if any: the career block sits under it, and Worth reading just before it.
+const LOCAL = E.local || null;
 // The second editor: another model that checks the selection and the draft (settings.md). Null when none is set.
 const SECOND = E.second_editor || null;
 // The long view: one analysis piece per edition, handled like a story for taps and chat.
 const LV = E.long_view ? { ...E.long_view, id: "long-view", kind: "long_view", headline: E.long_view.title, tags: E.long_view.tags || ["long-view"] } : null;
 if (LV) byId[LV.id] = { s: LV, sec: { id: "lv", name: "The long view" } };
-const LEAD = (E.lead || []).filter(id => byId[id]);
+// Worth reading and Career reading: essays summarised in takeaways, handled like stories for taps and chat.
+const piece = (p, kind) => ({ ...p, kind, headline: p.title, tags: p.tags || ["reads-" + (p.voice || "other")] });
+const READS = (E.reads || []).map(p => piece(p, "read"));
+const CAREER = (E.career_reading || []).map(p => piece(p, "career_read"));
+const careerSec = { id: LOCAL && E.sections.some(sec => sec.id === LOCAL) ? LOCAL : "reads", name: "Career reading" };
+for (const p of READS) byId[p.id] = { s: p, sec: { id: "reads", name: "Worth reading" } };
+for (const p of CAREER) byId[p.id] = { s: p, sec: careerSec };
+const LEAD = (E.lead || []).filter(id => byId[id] && !byId[id].s.kind);
 if (!LEAD.length) LEAD.push(...ALL.slice(0, 3).map(x => x.s.id));
 
 const fb = {};            // story id -> saved row
@@ -220,6 +250,7 @@ function vis(s, size) {
 function flags(s) {
   const f = fb[s.id] || {};
   const out = [];
+  if (s.watch) out.push(h("span", { class: "flag watch", text: "On your list" }));
   if (s.returning) out.push(h("span", { class: "flag back", text: "Back" }));
   if (s.coverage?.split) out.push(h("span", { class: "flag split", text: "Sources split" }));
   if (s.second_differs) out.push(h("span", { class: "flag second", text: SECOND + " differs" }));
@@ -246,6 +277,18 @@ function tile(id, kind) {
 /* ---------- page ---------- */
 function draw() {
   const rest = sec => sec.stories.map(s => s.id).filter(id => !LEAD.includes(id));
+  const shown = sec => rest(sec).length || sec.events?.length || sec.rankings?.length || (sec.id === LOCAL && CAREER.length);
+  const secView = sec => h("section", { class: "sec " + HUE[sec.id], "aria-label": sec.name },
+      h("div", { class: "sec-head" }, h("h2", { text: sec.name }), rest(sec).length > 1 ? h("span", { class: "meta", text: "swipe →" }) : null),
+      rest(sec).length ? h("div", { class: "row" }, rest(sec).map(id => tile(id, "row"))) : null,
+      sec.rankings?.length ? h("div", { class: "extras" }, h("span", { class: "kicker", text: "Rankings" }),
+        h("ul", {}, sec.rankings.map(r => h("li", { class: "rank" }, h("span", {}, h("a", { href: r.url, target: "_blank", rel: "noopener", text: r.name }), " · " + [r.publisher, r.date].filter(Boolean).join(", "),
+          h("span", { class: "sub", text: r.summary }))))) ) : null,
+      sec.events?.length ? h("div", { class: "extras" }, h("span", { class: "kicker", text: "Events ahead" }),
+        h("ul", {}, sec.events.map(ev => h("li", {}, h("span", { class: "when", text: ev.date }),
+          h("span", {}, h("a", { href: ev.url, target: "_blank", rel: "noopener", text: ev.name }),
+            h("span", { class: "sub", text: [ev.venue, ev.who, ev.price].filter(Boolean).join(" · ") })))))) : null,
+      sec.id === LOCAL && CAREER.length ? careerBlock() : null);
   const briefs = E.sections.flatMap(sec => (sec.briefs || []).map(b => ({ b, sec })));
   const parts = [
     h("header", { class: "mast" },
@@ -255,16 +298,13 @@ function draw() {
     tile(LEAD[0], "lead"),
     LEAD.length > 1 ? h("div", { class: "seconds" }, LEAD.slice(1, 3).map(id => tile(id, "second"))) : null,
     E.big_picture ? h("p", { class: "thread", text: E.big_picture }) : null,
-    E.sections.filter(sec => rest(sec).length || sec.events?.length || sec.rankings?.length).map(sec => h("section", { class: "sec " + HUE[sec.id], "aria-label": sec.name },
-      h("div", { class: "sec-head" }, h("h2", { text: sec.name }), rest(sec).length > 1 ? h("span", { class: "meta", text: "swipe →" }) : null),
-      rest(sec).length ? h("div", { class: "row" }, rest(sec).map(id => tile(id, "row"))) : null,
-      sec.rankings?.length ? h("div", { class: "extras" }, h("span", { class: "kicker", text: "Rankings" }),
-        h("ul", {}, sec.rankings.map(r => h("li", { class: "rank" }, h("span", {}, h("a", { href: r.url, target: "_blank", rel: "noopener", text: r.name }), " · " + [r.publisher, r.date].filter(Boolean).join(", "),
-          h("span", { class: "sub", text: r.summary }))))) ) : null,
-      sec.events?.length ? h("div", { class: "extras" }, h("span", { class: "kicker", text: "Events ahead" }),
-        h("ul", {}, sec.events.map(ev => h("li", {}, h("span", { class: "when", text: ev.date }),
-          h("span", {}, h("a", { href: ev.url, target: "_blank", rel: "noopener", text: ev.name }),
-            h("span", { class: "sub", text: [ev.venue, ev.who, ev.price].filter(Boolean).join(" · ") })))))) : null)),
+    E.sections.filter(sec => sec.id !== LOCAL && shown(sec)).map(secView),
+    READS.length ? h("section", { class: "sec reads", "aria-label": "Worth reading" },
+      h("div", { class: "sec-head" }, h("h2", { text: "Worth reading" }), h("span", { class: "meta", text: READS.length > 1 ? "essays, distilled · swipe →" : "an essay, distilled" })),
+      h("div", { class: "row essays" }, READS.map(p => readCard(p.id)))) : null,
+    E.sections.filter(sec => sec.id === LOCAL && shown(sec)).map(secView),
+    CAREER.length && careerSec.id === "reads" ? h("section", { class: "sec reads", "aria-label": "Career reading" },
+      h("div", { class: "sec-head" }, h("h2", { text: "Career reading" })), careerBlock(true)) : null,
     LV ? lvCard() : null,
     briefs.length ? h("section", { class: "brief", "aria-label": "In brief" }, h("span", { class: "kicker", text: "In brief" }),
       h("ul", {}, briefs.map(({ b, sec }) => h("li", { class: HUE[sec.id] }, h("span", { class: "dot" }),
@@ -288,13 +328,36 @@ function makingOf() {
   const lines = [];
   if (SECOND && mi.blind_scan?.ran) lines.push(SECOND + " searched the news on its own first: " + mi.blind_scan.stories + " stories, "
     + (mi.blind_scan.only_second_kept?.length || 0) + " found only by " + SECOND + " and kept, " + (mi.blind_scan.only_second_dropped || 0) + " found only by " + SECOND + " and dropped.");
+  if (SECOND && mi.reads?.ran) lines.push("Worth reading: " + mi.reads.candidates + " essays were candidates; " + SECOND + " and Claude agreed on " + mi.reads.picked_with_second
+    + ", Claude overruled " + SECOND + " on " + mi.reads.overruled + ". Each essay shown was read whole by both, separately, before they compared notes.");
   if (SECOND && mi.selection?.ran) lines.push("Selection check: Claude followed " + SECOND + " " + mi.selection.followed + " times and overruled it " + mi.selection.overruled + " times.");
   if (SECOND && mi.draft_check?.ran) lines.push("Draft check: " + SECOND + " raised " + mi.draft_check.flags + " flags; " + mi.draft_check.acted_on + " led to changes.");
   const who = SECOND ? "Claude researched and wrote it; " + SECOND + (mi.model ? " (" + mi.model + ")" : "") + " checked the selection and the draft. " : "Claude researched and wrote it; no second model checked it. ";
   return h("section", { class: "note" },
-    h("p", {}, h("b", { text: "How this was made. " }), who + "Facts come from pages read for this edition; \"My read\" is interpretation."),
+    h("p", {}, h("b", { text: "How this was made. " }), who + "Facts come from pages read for this edition; \"So what\" is Claude's interpretation."),
     lines.length ? h("ul", { class: "deeper" }, lines.map(l => h("li", { text: l }))) : null,
     m.limits ? h("p", {}, h("b", { text: "Limits. " }), m.limits) : null);
+}
+
+function readCard(id) {
+  const { s, sec } = byId[id];
+  const more = [(s.takeaways || []).length + " takeaways inside", s.second_opinion && SECOND ? SECOND + "'s second opinion" : null, s.requested ? "you asked for it" : null].filter(Boolean).join(" · ");
+  return h("button", { type: "button", class: "tap piece " + sec.id, id: "t-" + id, "aria-label": s.title, onclick: e => openSheet(id, e.currentTarget) },
+    h("div", { class: "cover" },
+      s.photo?.src ? h("img", { src: s.photo.src, alt: "", loading: "lazy" }) : null,
+      s.read_minutes ? h("span", { class: "mins", text: "saves you " + s.read_minutes + " min" }) : null,
+      h("div", { class: "by" }, h("b", { text: s.author || "" }), h("span", { text: [s.outlet, s.published ? fmtDate(s.published) : null].filter(Boolean).join(" · ") }))),
+    h("div", { class: "txt" },
+      h("h3", { text: s.title }),
+      h("div", { class: "why" }, h("span", { class: "lbl", text: "Why read" }), s.why_read || s.summary),
+      s.key_takeaway ? h("div", { class: "take" }, h("span", { class: "lbl", text: "Key takeaway" }), s.key_takeaway) : null,
+      h("span", { class: "meta", text: more }),
+      flags(s)));
+}
+
+function careerBlock(bare) {
+  const cards = h("div", { class: "pieces" }, CAREER.map(p => readCard(p.id)));
+  return bare ? cards : [h("span", { class: "kicker", text: "Career reading" }), cards];
 }
 
 function lvCard() {
@@ -337,6 +400,7 @@ function refreshTile(id) {
   const old = document.getElementById("t-" + id);
   if (!old) return;
   if (id === "long-view") { old.replaceWith(lvCard()); return; }
+  if (byId[id].s.kind) { old.replaceWith(readCard(id)); return; }
   const kind = old.classList.contains("lead") ? "lead" : old.closest(".seconds") ? "second" : "row";
   old.replaceWith(tile(id, kind));
 }
@@ -436,9 +500,46 @@ function drawLongView() {
   if (q && keepFocus) q.focus();
 }
 
+function drawRead() {
+  const { s, sec } = byId[openId];
+  const f = fb[s.id] || {}, so = s.second_opinion;
+  const sh = document.getElementById("sheet");
+  const typed = document.getElementById("q")?.value || "";
+  const keepFocus = document.activeElement?.id === "q";
+  const btn = (label, pressed, onclick, disabled) => h("button", { type: "button", "aria-pressed": String(!!pressed), onclick, disabled: disabled || null, text: label });
+  sh.className = "sheet " + HUE[sec.id];
+  sh.replaceChildren(h("div", { class: "in" },
+    h("div", { class: "sbar" }, h("span", { class: "kicker sk", text: sec.name }), h("button", { type: "button", class: "close", text: "Close", onclick: () => closeSheet(false) })),
+    h("p", { class: "meta", text: [s.author, s.outlet, s.published ? fmtDate(s.published) : null, s.read_minutes ? "the original is " + s.read_minutes + " min" : null,
+      s.requested ? "you asked for it" : null].filter(Boolean).join(" · ") }),
+    h("h2", { id: "sheet-title", text: s.title }),
+    h("p", { class: "standfirst", text: s.summary }),
+    h("div", {}, h("span", { class: "lbl", text: "The takeaways" }), h("ol", { class: "takes" }, (s.takeaways || []).map(t => h("li", { text: t })))),
+    s.quote ? h("blockquote", { class: "quote" }, "“" + s.quote + "”", h("small", { text: "In " + (s.author || "the author") + "'s words" })) : null,
+    s.for_you ? h("div", { class: "foryou" }, h("span", { class: "lbl", text: "For your search" }), s.for_you) : null,
+    so ? h("div", { class: "mnote" }, h("span", { class: "lbl", text: "Second opinion: " + (SECOND || "a second model") + " read it too" }), so.position,
+      so.stake ? h("div", { class: "meta", text: "What the author has at stake: " + so.stake }) : null,
+      so.exchange ? h("div", { class: "meta", text: "How the exchange went: " + so.exchange }) : null)
+      : h("p", { class: "meta", text: SECOND ? "No second opinion on this one: " + SECOND + " did not read it." : "Read by Claude alone; no second model is set." }),
+    s.open_if ? h("p", { class: "changed" }, h("b", { text: "Open it if: " }), s.open_if) : null,
+    h("div", { class: "srcs" }, h("span", { class: "lbl", text: "The original, free to read" }),
+      h("span", {}, h("a", { href: s.url, target: "_blank", rel: "noopener", text: s.title }), " · " + [s.author, s.outlet].filter(Boolean).join(", "))),
+    sample ? chatPanel(s, f) : null,
+    h("div", { class: "acts" },
+      btn(f.read ? "Read ✓" : "Read", f.read, () => save(s, { read: !f.read }), !db || !canWrite),
+      btn(f.liked ? "Liked ✓" : "Like", f.liked, () => save(s, { liked: !f.liked, skipped: false }), !db || !canWrite),
+      btn(f.skipped ? "Skipped ✓" : "Skip", f.skipped, () => save(s, { skipped: !f.skipped, liked: false }), !db || !canWrite),
+      btn("Discuss", false, () => { const q = document.getElementById("q"); q?.scrollIntoView({ block: "center" }); q?.focus(); }, !sample))
+  ));
+  const q = document.getElementById("q");
+  if (q && typed) q.value = typed;
+  if (q && keepFocus) q.focus();
+}
+
 function drawSheet() {
   if (!openId) return;
   if (byId[openId].s.kind === "long_view") return drawLongView();
+  if (byId[openId].s.kind) return drawRead();
   const { s, sec } = byId[openId];
   const f = fb[s.id] || {};
   const c = s.coverage || {};
@@ -455,19 +556,21 @@ function drawSheet() {
     h("h2", { id: "sheet-title", text: s.headline }),
     s.key && s.photo?.src ? h("div", { class: "keyline" }, h("b", { text: s.key.value }), h("span", { text: s.key.label })) : null,
     h("p", { text: s.summary }),
+    s.my_read ? h("div", { class: "read" }, h("span", { class: "lbl", text: "So what (Claude's read, not a reported fact)" }), s.my_read) : null,
     chart(s.visual),
     h("div", { class: "cov" },
       h("span", { class: "chip", text: n + (n === 1 ? " source" : " sources") + (countries.length ? " · " + countries.join(" ") : "") }),
       [...new Set(c.kinds || [])].slice(0, 3).map(k => h("span", { class: "chip", text: k })),
       c.split ? h("span", { class: "chip split", text: "Sources split" }) : null,
       c.blind_spot ? h("span", { class: "chip blind", text: "Blind spot" }) : null,
+      s.watch ? h("span", { class: "chip watch", text: "On your watch list" }) : null,
       s.second_differs ? h("span", { class: "chip second", text: SECOND + " differs" }) : null),
+    s.for_you ? h("div", { class: "foryou" }, h("span", { class: "lbl", text: "For your search" }), s.for_you) : null,
     s.what_happened ? h("p", {}, h("span", { class: "lbl", text: "What happened" }), s.what_happened) : null,
     s.why_it_matters ? h("p", {}, h("span", { class: "lbl", text: "Why it matters" }), s.why_it_matters) : null,
     c.split ? h("div", {}, h("span", { class: "lbl", text: "Sources split on " + (c.split.topic || "this") }),
       h("div", { class: "splitbox" }, h("div", {}, h("b", { text: c.split.a.source }), c.split.a.says), h("div", {}, h("b", { text: c.split.b.source }), c.split.b.says))) : null,
     c.blind_spot ? h("p", { class: "meta" }, h("span", { class: "lbl", text: "Blind spot" }), c.blind_spot) : null,
-    s.my_read ? h("div", { class: "read" }, h("span", { class: "lbl", text: "My read (Claude's interpretation)" }), s.my_read) : null,
     s.second_differs ? h("div", { class: "mnote" }, h("span", { class: "lbl", text: SECOND + " sees it differently" }), s.second_differs.note,
       s.second_differs.would_change_mind ? h("div", { class: "meta", text: "What would settle it: " + s.second_differs.would_change_mind }) : null) : null,
     h("div", { class: "srcs" }, h("span", { class: "lbl", text: "Sources" }),
@@ -503,6 +606,18 @@ function chatRules(s) {
     + "QUESTION: " + s.question + "\nTITLE: " + s.title + "\nARGUMENT:\n" + (s.body || []).join("\n")
     + (s.claim ? "\nTHE CALL THAT COULD PROVE WRONG: " + s.claim : "")
     + (s.second ? "\nA SECOND MODEL (" + SECOND + ") ARGUED: " + s.second.position : "");
+  const seeking = E.seeking ? "\nWhat the reader is looking for in their career: " + E.seeking : "";
+  if (s.kind) return "You are helping one reader discuss an essay summarised in their personal news briefing. About the reader: " + (E.reader || "not stated") + ". "
+    + "They have not read the essay, and you have only the summary below, not its text: say so when they ask "
+    + "for something the summary does not cover, and suggest they open the original. Keep what the author argues apart from your own view. "
+    + "You cannot browse. Keep answers under 150 words unless they ask for more. Write plainly. "
+    + "If their message is a request or an instruction rather than a question (for example 'more from this author' or a link to another essay), "
+    + "say in one line that it is saved for the next edition.\n\n"
+    + "ESSAY: " + s.title + ", by " + s.author + " (" + (s.outlet || "") + ", " + (s.published || "") + ")\nIn one sentence: " + s.summary
+    + "\nTakeaways:\n- " + (s.takeaways || []).join("\n- ")
+    + (s.quote ? "\nA quote from it: " + s.quote : "")
+    + (s.second_opinion ? "\nA SECOND MODEL (" + (SECOND || "another model") + ") READ IT TOO AND SAID: " + s.second_opinion.position : "")
+    + (s.for_you ? seeking + "\nWhat it may mean for that search: " + s.for_you : "");
   const c = s.coverage || {};
   return "You are helping one reader discuss a story from their personal news briefing. About the reader: " + (E.reader || "not stated") + ". You know only the story below and your own background knowledge. You cannot browse, "
     + "so say so when asked about anything after the story. Separate what the sources say from your own interpretation. "
@@ -513,7 +628,8 @@ function chatRules(s) {
     + "\nWhat happened: " + (s.what_happened || "") + "\nWhy it matters: " + (s.why_it_matters || "")
     + "\nThe briefing's read: " + (s.my_read || "")
     + (c.split ? "\nSources disagree on " + c.split.topic + ": " + c.split.a.source + " says " + c.split.a.says + "; " + c.split.b.source + " says " + c.split.b.says : "")
-    + "\nSources: " + (s.sources || []).map(x => x.name).join(", ");
+    + "\nSources: " + (s.sources || []).map(x => x.name).join(", ")
+    + (s.for_you ? seeking + "\nWhat it may mean for that search: " + s.for_you : "");
 }
 
 async function ask(s, q) {
