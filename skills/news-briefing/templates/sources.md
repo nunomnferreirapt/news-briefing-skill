@@ -137,3 +137,8 @@ The voices behind the "Worth reading" section (and the "Career reading" block, w
 | latent-space | Latent Space | tech press | US | en | partly open | feed https://www.latent.space/feed; only essays that argue something of their own. Never the daily news issues, podcast episodes, announcement write-ups or event recaps |
 | lenny | Lenny's Newsletter | newspaper | US | en | paywall | feed https://www.lennysnewsletter.com/feed; free essays only. Never podcast episodes, community digests, promotions or paid posts; career essays go to "Career reading" |
 | poyar | Growth Unhinged (Kyle Poyar) | newspaper | US | en | partly open | no working feed: read https://www.growthunhinged.com/archive; free essays and reports, about one a week; go-to-market |
+
+### Inbox
+
+One-off pieces you paste (a link from LinkedIn, a newsletter, a friend), judged for Worth reading without adding their publisher as a source. One line each: `date, link (title, publisher; how it reached you): verdict`. A line with no verdict is a requested piece for the next run: it takes the first slot if it is a free essay the run can read whole, and the run writes the verdict back (shown in which edition, or left out and why). A link you give in Discuss or in a session gets a line here too.
+
